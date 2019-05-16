@@ -82,7 +82,7 @@ namespace MvcFramework.HTTP.Requests
 					break;
 				}
 
-				string[] keyValuePairArray = headerKeyValuePair.Split(new[] { ':', ' ' }, StringSplitOptions.RemoveEmptyEntries);
+				string[] keyValuePairArray = headerKeyValuePair.Split(new[] { ": " }, StringSplitOptions.RemoveEmptyEntries);
 				HttpHeader header = new HttpHeader(keyValuePairArray[0], keyValuePairArray[1]);
 				this.Headers.AddHeader(header);
 			}
@@ -119,6 +119,11 @@ namespace MvcFramework.HTTP.Requests
 		}
 		private void ParseFormDataParameters(string formData)
 		{
+			if (string.IsNullOrEmpty(formData))
+			{
+				return;
+			}
+
 			string[] parametersArray = formData.Split(new[] { '&' }, StringSplitOptions.None);
 
 			foreach (var parameter in parametersArray)

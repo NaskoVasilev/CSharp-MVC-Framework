@@ -20,5 +20,7 @@
 
 		public const string ContentTypeHeaderHtmlValue = "text/html; charset=utf-8";
 
+		public const string RouteNotFound = "Route with method: {0} and path: {1} not found.";
+
 	}
 }

@@ -48,6 +48,8 @@ namespace MvcFramework.WebServer.Routing
 			{
 				return this.routes[method][path];
 			}
+
+			return null;
 		}
 	}
 }
