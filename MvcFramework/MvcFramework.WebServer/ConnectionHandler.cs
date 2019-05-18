@@ -9,6 +9,7 @@ using MvcFramework.WebServer.Routing.Contracts;
 using System;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace MvcFramework.WebServer
 {
@@ -27,13 +28,13 @@ namespace MvcFramework.WebServer
 			this.serverRoutingTable = serverRoutingTable;
 		}
 
-		public void ProccessRequest()
+		public async Task ProccessRequestAsync()
 		{
 			IHttpResponse httpResponse = null;
 
 			try
 			{
-				IHttpRequest httpRequest = ReadRequest();
+				IHttpRequest httpRequest = await ReadRequestAsync();
 
 				if (httpRequest != null)
 				{
@@ -50,18 +51,18 @@ namespace MvcFramework.WebServer
 				httpResponse = new TextResult(e.Message, HttpResponseStatusCode.InernalServerError);
 			}
 
-			this.PrepareResponse(httpResponse);
+			await this.PrepareResponseAsync(httpResponse);
 			this.client.Shutdown(SocketShutdown.Both);
 		}
 
-		private IHttpRequest ReadRequest()
+		private async Task<IHttpRequest> ReadRequestAsync()
 		{
 			StringBuilder result = new StringBuilder();
 			ArraySegment<byte> data = new ArraySegment<byte>(new byte[1024]);
 
 			while (true)
 			{
-				int numberOfBytesRead = client.Receive(data.Array);
+				int numberOfBytesRead = await Task.Run(() => this.client.Receive(data.Array, SocketFlags.None));
 
 				if(numberOfBytesRead == 0)
 				{
@@ -99,10 +100,10 @@ namespace MvcFramework.WebServer
 			return httpResponse;
 		}
 
-		private void PrepareResponse(IHttpResponse httpResponse)
+		private async Task PrepareResponseAsync(IHttpResponse httpResponse)
 		{
 			byte[] byteSegments = httpResponse.GetBytes();
-			client.Send(byteSegments, SocketFlags.None);
+			await Task.Run(() => client.Send(byteSegments, SocketFlags.None));
 		}
 	}
 }

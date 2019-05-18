@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace MvcFramework.WebServer
 {
@@ -35,15 +36,15 @@ namespace MvcFramework.WebServer
 			while (isRunning)
 			{
 				Console.WriteLine("Waiting for client...");
-				Socket client = this.listener.AcceptSocket();
-				this.Listen(client);
+				Socket client = this.listener.AcceptSocketAsync().GetAwaiter().GetResult();
+				Task.Run(() => this.Listen(client));
 			}
 		}
 
-		private void Listen(Socket client)
+		private async Task Listen(Socket client)
 		{
 			ConnectionHandler connectionHandler = new ConnectionHandler(client, this.serverRoutingTable);
-			connectionHandler.ProccessRequest();
+			await connectionHandler.ProccessRequestAsync();
 		}
 	}
 }

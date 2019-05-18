@@ -4,12 +4,13 @@ using MvcFramework.WebServer;
 using MvcFramework.WebServer.Routing;
 using MvcFramework.WebServer.Routing.Contracts;
 using System;
+using System.Net.Sockets;
 
 namespace MvcFramework.Demo
 {
 	public class StartUp
 	{
-		private const int Port = 7777;
+		private const int Port = 8000;
 
 		public static void Main(string[] args)
 		{

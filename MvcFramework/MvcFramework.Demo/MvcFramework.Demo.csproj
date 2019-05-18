@@ -10,4 +10,10 @@
     <ProjectReference Include="..\MvcFramework.WebServer\MvcFramework.WebServer.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Views\User\Login.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
