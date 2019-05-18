@@ -62,7 +62,7 @@ namespace MvcFramework.WebServer
 
 			while (true)
 			{
-				int numberOfBytesRead = await Task.Run(() => this.client.Receive(data.Array, SocketFlags.None));
+				int numberOfBytesRead = await this.client.ReceiveAsync(data.Array, SocketFlags.None);
 
 				if(numberOfBytesRead == 0)
 				{
@@ -103,7 +103,7 @@ namespace MvcFramework.WebServer
 		private async Task PrepareResponseAsync(IHttpResponse httpResponse)
 		{
 			byte[] byteSegments = httpResponse.GetBytes();
-			await Task.Run(() => client.Send(byteSegments, SocketFlags.None));
+			await client.SendAsync(byteSegments, SocketFlags.None);
 		}
 	}
 }
