@@ -1,4 +1,5 @@
 ﻿using MvcFramework.HTTP.Common;
+using MvcFramework.HTTP.Cookies;
 using MvcFramework.HTTP.Enums;
 using MvcFramework.HTTP.Headers;
 using MvcFramework.HTTP.Responses;

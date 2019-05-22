@@ -17,7 +17,7 @@ namespace MvcFramework.HTTP.Cookies
 
 			this.Key = key;
 			this.Value = value;
-			this.IsNew = false;
+			this.IsNew = true;
 			this.Expires = DateTime.UtcNow.AddDays(expires);
 			this.Path = path;
 			

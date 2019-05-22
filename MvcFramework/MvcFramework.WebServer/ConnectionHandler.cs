@@ -1,4 +1,5 @@
 ﻿using MvcFramework.HTTP.Common;
+using MvcFramework.HTTP.Cookies;
 using MvcFramework.HTTP.Enums;
 using MvcFramework.HTTP.Exceptions;
 using MvcFramework.HTTP.Requests;
@@ -6,6 +7,7 @@ using MvcFramework.HTTP.Requests.Contracts;
 using MvcFramework.HTTP.Responses.Contracts;
 using MvcFramework.WebServer.Results;
 using MvcFramework.WebServer.Routing.Contracts;
+using MvcFramework.WebServer.Sessions;
 using System;
 using System.Net.Sockets;
 using System.Text;
@@ -39,7 +41,9 @@ namespace MvcFramework.WebServer
 				if (httpRequest != null)
 				{
 					Console.WriteLine($"Proccessing {httpRequest.RequestMethod} {httpRequest.Path} ...");
+					string sessionId = SetRequestSession(httpRequest);
 					httpResponse = HandleRequest(httpRequest);
+					SetResponseSession(httpResponse, sessionId);
 				}
 			}
 			catch (BadRequestException e)
@@ -104,6 +108,31 @@ namespace MvcFramework.WebServer
 		{
 			byte[] byteSegments = httpResponse.GetBytes();
 			await client.SendAsync(byteSegments, SocketFlags.None);
+		}
+
+		private string SetRequestSession(IHttpRequest httpRequest)
+		{
+			string sessionId = null;
+
+			if (httpRequest.Cookies.ContainsCookie(HttpSessionStorage.SessionCookieKey))
+			{
+				sessionId = httpRequest.Cookies.GetCookie(HttpSessionStorage.SessionCookieKey).Value;
+			}
+			else
+			{
+				sessionId = Guid.NewGuid().ToString();
+			}
+
+			httpRequest.Session = HttpSessionStorage.GetSession(sessionId);
+			return sessionId;
+		}
+
+		private void SetResponseSession(IHttpResponse response, string sessionId)
+		{
+			if(sessionId != null)
+			{
+				response.AddCookie(new HttpCookie(HttpSessionStorage.SessionCookieKey, sessionId));
+			}
 		}
 	}
 }

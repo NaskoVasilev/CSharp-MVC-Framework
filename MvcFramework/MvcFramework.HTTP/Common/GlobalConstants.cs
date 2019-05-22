@@ -14,7 +14,7 @@
 
 		public const string ContentTypeHeaderKey = "Content-Type";
 
-		public const string LocationHeaderKey = "Content-Type";
+		public const string LocationHeaderKey = "Location";
 
 		public const string ContentTypeHeaderTextValue = "text/plain; charset=utf-8";
 
@@ -29,5 +29,7 @@
 		public const string SetCookieKey = "Set-Cookie";
 
 		public const string CookieHeaderKey = "Cookie";
+
+		public const string ParameterDoesNotExists = "There is no parameter with name: {0} in the session";
 	}
 }

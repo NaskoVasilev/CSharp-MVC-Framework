@@ -16,11 +16,18 @@ namespace MvcFramework.Demo
 		{
 			IServerRoutingTable serverRoutingTable = new ServerRoutingTable();
 
-			serverRoutingTable.Add(HttpRequestMethod.Get, "/", httpRequset => new HomeController().Index());
+			//Http get methods
+			serverRoutingTable.Add(HttpRequestMethod.Get, "/", httpRequset => new HomeController().Index(httpRequset));
 			serverRoutingTable.Add(HttpRequestMethod.Get, "/about", httpRequset => new HomeController().About());
 			serverRoutingTable.Add(HttpRequestMethod.Get, "/greet", httpRequset => new HomeController().GreetUser(httpRequset));
-			serverRoutingTable.Add(HttpRequestMethod.Get, "/login", httpRequset => new UserController().Login());
-			serverRoutingTable.Add(HttpRequestMethod.Post, "/login", httpRequset => new UserController().Login(httpRequset));
+			serverRoutingTable.Add(HttpRequestMethod.Get, "/user/login", httpRequset => new UserController().Login());
+			serverRoutingTable.Add(HttpRequestMethod.Get, "/user/register", httpRequset => new UserController().Register());
+			serverRoutingTable.Add(HttpRequestMethod.Get, "/user/logout", httpRequset => new UserController().Logout(httpRequset));
+			serverRoutingTable.Add(HttpRequestMethod.Get, "/welcome", httpRequset => new HomeController().Welcome(httpRequset));
+
+			//Http post methods
+			serverRoutingTable.Add(HttpRequestMethod.Post, "/user/login", httpRequset => new UserController().Login(httpRequset));
+			serverRoutingTable.Add(HttpRequestMethod.Post, "/user/register", httpRequset => new UserController().Register(httpRequset));
 
 			Server server = new Server(Port, serverRoutingTable);
 			server.Run();

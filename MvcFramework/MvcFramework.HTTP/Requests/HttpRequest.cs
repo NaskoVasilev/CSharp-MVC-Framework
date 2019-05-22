@@ -6,6 +6,7 @@ using MvcFramework.HTTP.Exceptions;
 using MvcFramework.HTTP.Headers;
 using MvcFramework.HTTP.Headers.Contracts;
 using MvcFramework.HTTP.Requests.Contracts;
+using MvcFramework.HTTP.Sessions.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,7 +38,9 @@ namespace MvcFramework.HTTP.Requests
 
 		public IHttpHeaderCollection Headers { get; }
 
-		public IHttpCookieCollection Cookies { get; set; }
+		public IHttpCookieCollection Cookies { get; }
+
+		public IHttpSession Session { get; set; }
 
 		public HttpRequestMethod RequestMethod { get; private set; }
 

@@ -68,7 +68,7 @@ namespace MvcFramework.HTTP.Responses
 		public override string ToString()
 		{
 			StringBuilder responseText = new StringBuilder();
-			responseText.Append($"{GlobalConstants.HttpOneProtocolFragment} {this.StatusCode} {this.StatusCode.GetStatusMessage()}")
+			responseText.Append($"{GlobalConstants.HttpOneProtocolFragment} {(int)this.StatusCode} {this.StatusCode.GetStatusMessage()}")
 				.Append(GlobalConstants.HttpNewLine)
 				.Append(Headers)
 				.Append(GlobalConstants.HttpNewLine)

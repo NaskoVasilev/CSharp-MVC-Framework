@@ -6,8 +6,8 @@
     <title></title>
 </head>
 <body>
-	<h2>Login</h2>
-	<form action="/user/login" method="post">
+	<h2>Register</h2>
+	<form action="/user/register" method="post">
 		<label>Username</label>
 		<br />
 		<input type="text" name="username" placeholder="Enter your username" />
@@ -16,7 +16,11 @@
 		<br />
 		<input type="password" name="password" placeholder="Enter your password" />
 		<br />
-		<input type="submit" value="Login" />
+		<label>Confirm Password</label>
+		<br />
+		<input type="password" name="confirmPassword" placeholder="Enter your password again" />
+		<br />
+		<input type="submit" value="Register" />
 	</form>
 </body>
 </html>

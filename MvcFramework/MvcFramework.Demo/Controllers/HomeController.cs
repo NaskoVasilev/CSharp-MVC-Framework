@@ -5,13 +5,22 @@ using MvcFramework.WebServer.Results;
 
 namespace MvcFramework.Demo.Controllers
 {
-	public class HomeController
+	public class HomeController : BaseController
 	{
-		public IHttpResponse Index()
+		public IHttpResponse Index(IHttpRequest request)
 		{
-			string content = "<h1>Hello, World!</h1>";
+			return View();
+		}
 
-			return new HtmlResult(content, HttpResponseStatusCode.Ok);
+		public IHttpResponse Welcome(IHttpRequest request)
+		{
+			if (this.IsLogedIn(request))
+			{
+				string username = request.Session.GetParameter("username").ToString();
+				ViewData["username"] = username;
+			}
+
+			return View();
 		}
 
 		public IHttpResponse About()
