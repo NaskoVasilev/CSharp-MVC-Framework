@@ -1,4 +1,6 @@
 ﻿using MvcFramework.HTTP.Common;
+using MvcFramework.HTTP.Cookies;
+using MvcFramework.HTTP.Cookies.Contracts;
 using MvcFramework.HTTP.Enums;
 using MvcFramework.HTTP.Exceptions;
 using MvcFramework.HTTP.Headers;
@@ -20,6 +22,7 @@ namespace MvcFramework.HTTP.Requests
 			this.FormData = new Dictionary<string, object>();
 			this.QueryData = new Dictionary<string, object>();
 			this.Headers = new HttpHeaderCollection();
+			this.Cookies = new HttpCookieCollection();
 
 			this.ParseRequest(requestString);
 		}
@@ -33,6 +36,8 @@ namespace MvcFramework.HTTP.Requests
 		public Dictionary<string, object> QueryData { get; }
 
 		public IHttpHeaderCollection Headers { get; }
+
+		public IHttpCookieCollection Cookies { get; set; }
 
 		public HttpRequestMethod RequestMethod { get; private set; }
 
@@ -90,7 +95,21 @@ namespace MvcFramework.HTTP.Requests
 
 		private void ParseRequestCokies()
 		{
-			throw new NotImplementedException();
+			if (this.Headers.ContainsHeader(GlobalConstants.CookieHeaderKey))
+			{
+				string cookieValue = this.Headers.GetHeader(GlobalConstants.CookieHeaderKey).Value;
+				var unparsedCookies = cookieValue.Split("; ", StringSplitOptions.RemoveEmptyEntries);
+
+				foreach (var cookieKeyValuePairString in unparsedCookies)
+				{
+					string[] cookieKeyValuePair = cookieKeyValuePairString.Split('=', StringSplitOptions.RemoveEmptyEntries);
+					if(cookieKeyValuePair.Length == 2)
+					{
+						HttpCookie cookie = new HttpCookie(cookieKeyValuePair[0], cookieKeyValuePair[1], false);
+						this.Cookies.AddCookie(cookie);
+					}
+				}
+			}
 		}
 
 		private void ParseQueryParameters()
@@ -155,6 +174,8 @@ namespace MvcFramework.HTTP.Requests
 			this.ParseRequestPath();
 
 			this.ParseRequestHeaders(splitRequestContent.Skip(1).ToArray());
+			this.ParseRequestCokies();
+
 			this.ParseRequestParameters(splitRequestContent[splitRequestContent.Length - 1]);
 		}
 	}

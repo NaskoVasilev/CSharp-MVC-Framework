@@ -1,4 +1,5 @@
-﻿using MvcFramework.HTTP.Enums;
+﻿using MvcFramework.HTTP.Cookies.Contracts;
+using MvcFramework.HTTP.Enums;
 using MvcFramework.HTTP.Headers.Contracts;
 using System.Collections.Generic;
 
@@ -15,6 +16,8 @@ namespace MvcFramework.HTTP.Requests.Contracts
 		Dictionary<string, object> QueryData { get; }
 
 		IHttpHeaderCollection Headers { get; }
+
+		IHttpCookieCollection Cookies { get; }
 
 		HttpRequestMethod RequestMethod { get; }
 	}

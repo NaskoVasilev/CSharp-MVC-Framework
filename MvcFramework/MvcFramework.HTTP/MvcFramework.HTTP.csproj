@@ -4,5 +4,9 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Sessions\" />
+  </ItemGroup>
+
 </Project>
 

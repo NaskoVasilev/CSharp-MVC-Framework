@@ -22,5 +22,12 @@
 
 		public const string RouteNotFound = "Route with method: {0} and path: {1} not found.";
 
+		public const string InvalidCookieKey = "There is no cookie with key: {0}.";
+
+		public const string DuplicateCookieKey = "There is already cookie with key: {0} in the cookie collection.";
+
+		public const string SetCookieKey = "Set-Cookie";
+
+		public const string CookieHeaderKey = "Cookie";
 	}
 }

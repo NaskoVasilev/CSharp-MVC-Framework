@@ -1,4 +1,6 @@
 ﻿using MvcFramework.HTTP.Common;
+using MvcFramework.HTTP.Cookies;
+using MvcFramework.HTTP.Cookies.Contracts;
 using MvcFramework.HTTP.Enums;
 using MvcFramework.HTTP.Extensions;
 using MvcFramework.HTTP.Headers;
@@ -13,6 +15,7 @@ namespace MvcFramework.HTTP.Responses
 		public HttpResponse()
 		{
 			this.Headers = new HttpHeaderCollection();
+			this.Cookies = new HttpCookieCollection();
 			this.Content = new byte[0];
 		}
 
@@ -25,6 +28,8 @@ namespace MvcFramework.HTTP.Responses
 		public HttpResponseStatusCode StatusCode { get; set; }
 
 		public IHttpHeaderCollection Headers { get; }
+			
+		public IHttpCookieCollection Cookies { get; set; }
 
 		public byte[] Content { get; set; }
 
@@ -32,6 +37,13 @@ namespace MvcFramework.HTTP.Responses
 		{
 			CoreValidator.ThrowIfNull(header, nameof(header));
 			this.Headers.AddHeader(header);
+		}
+
+		public void AddCookie(HttpCookie cookie)
+		{
+			CoreValidator.ThrowIfNull(cookie, nameof(cookie));
+
+			this.Cookies.AddCookie(cookie);
 		}
 
 		public byte[] GetBytes()
@@ -59,7 +71,8 @@ namespace MvcFramework.HTTP.Responses
 			responseText.Append($"{GlobalConstants.HttpOneProtocolFragment} {this.StatusCode} {this.StatusCode.GetStatusMessage()}")
 				.Append(GlobalConstants.HttpNewLine)
 				.Append(Headers)
-				.Append(GlobalConstants.HttpNewLine);
+				.Append(GlobalConstants.HttpNewLine)
+				.Append(Cookies);
 
 			responseText.Append(GlobalConstants.HttpNewLine);
 			return responseText.ToString();
