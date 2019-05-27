@@ -31,5 +31,7 @@
 		public const string CookieHeaderKey = "Cookie";
 
 		public const string ParameterDoesNotExists = "There is no parameter with name: {0} in the session";
+
+		public const string StaticFolderName = "wwwroot";
 	}
 }

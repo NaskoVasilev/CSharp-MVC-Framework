@@ -9,7 +9,9 @@ using MvcFramework.WebServer.Results;
 using MvcFramework.WebServer.Routing.Contracts;
 using MvcFramework.WebServer.Sessions;
 using System;
+using System.IO;
 using System.Net.Sockets;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -50,7 +52,7 @@ namespace MvcFramework.WebServer
 			{
 				httpResponse = new TextResult(e.Message, HttpResponseStatusCode.BadRequest);
 			}
-			catch(Exception e)
+			catch (Exception e)
 			{
 				httpResponse = new TextResult(e.Message, HttpResponseStatusCode.InernalServerError);
 			}
@@ -68,7 +70,7 @@ namespace MvcFramework.WebServer
 			{
 				int numberOfBytesRead = await this.client.ReceiveAsync(data.Array, SocketFlags.None);
 
-				if(numberOfBytesRead == 0)
+				if (numberOfBytesRead == 0)
 				{
 					break;
 				}
@@ -76,13 +78,13 @@ namespace MvcFramework.WebServer
 				string bytesAsString = Encoding.UTF8.GetString(data.Array, 0, numberOfBytesRead);
 				result.Append(bytesAsString);
 
-				if(numberOfBytesRead < 1023)
+				if (numberOfBytesRead < 1023)
 				{
 					break;
 				}
 			}
 
-			if(result == null)
+			if (result == null)
 			{
 				return null;
 			}
@@ -93,15 +95,30 @@ namespace MvcFramework.WebServer
 
 		private IHttpResponse HandleRequest(IHttpRequest httpRequest)
 		{
-			if(!this.serverRoutingTable.Contains(httpRequest.RequestMethod, httpRequest.Path))
+			if (!this.serverRoutingTable.Contains(httpRequest.RequestMethod, httpRequest.Path))
 			{
-				string content = string.Format(GlobalConstants.RouteNotFound, httpRequest.RequestMethod, httpRequest.Path);
-				return new TextResult(content, HttpResponseStatusCode.NotFound);
+				return this.ReturnIfResource(httpRequest);
 			}
 
 			IHttpResponse httpResponse = this.serverRoutingTable.Get(httpRequest.RequestMethod, httpRequest.Path)
 				.Invoke(httpRequest);
 			return httpResponse;
+		}
+
+		private IHttpResponse ReturnIfResource(IHttpRequest httpRequest)
+		{
+			string assemblyPath = Assembly.GetExecutingAssembly().Location;
+			string folderPrefix = "/../../../../";
+			string filePath = assemblyPath + folderPrefix + GlobalConstants.StaticFolderName + httpRequest.Path;
+
+			if (File.Exists(filePath))
+			{
+				byte[] content = File.ReadAllBytes(filePath);
+				return new InlineResourceResult(content, HttpResponseStatusCode.Found);
+			}
+
+			string notFoundMessage = string.Format(GlobalConstants.RouteNotFound, httpRequest.RequestMethod, httpRequest.Path);
+			return new TextResult(notFoundMessage, HttpResponseStatusCode.NotFound);
 		}
 
 		private async Task PrepareResponseAsync(IHttpResponse httpResponse)
@@ -129,7 +146,7 @@ namespace MvcFramework.WebServer
 
 		private void SetResponseSession(IHttpResponse response, string sessionId)
 		{
-			if(sessionId != null)
+			if (sessionId != null)
 			{
 				response.AddCookie(new HttpCookie(HttpSessionStorage.SessionCookieKey, sessionId));
 			}
