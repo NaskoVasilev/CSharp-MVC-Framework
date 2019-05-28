@@ -42,9 +42,6 @@ namespace IRunes.App
 			serverRoutingTable.Add(HttpRequestMethod.Post, "/Tracks/Create", request => new TracksController().CreateConfirm(request));
 			serverRoutingTable.Add(HttpRequestMethod.Get, "/Tracks/Details", request => new TracksController().Details(request));
 			#endregion
-
-			Server server = new Server(8000, serverRoutingTable);
-			server.Run();
 		}
 
 		public void ConfigureServices()

@@ -1,9 +1,10 @@
-﻿using MvcFramework.HTTP.Requests.Contracts;
+﻿using MvcFramework;
+using MvcFramework.HTTP.Requests.Contracts;
 using MvcFramework.HTTP.Responses.Contracts;
 
 namespace IRunes.App.Controllers
 {
-	public class HomeController : BaseController
+	public class HomeController : Controller
 	{
 		public IHttpResponse Index(IHttpRequest httpRequest)
 		{

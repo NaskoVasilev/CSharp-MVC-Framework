@@ -1,13 +1,14 @@
 ﻿using IRunes.App.Extensions;
 using IRunes.Data;
 using IRunes.Models;
+using MvcFramework;
 using MvcFramework.HTTP.Requests.Contracts;
 using MvcFramework.HTTP.Responses.Contracts;
 using System.Linq;
 
 namespace IRunes.App.Controllers
 {
-	public class AlbumsController : BaseController
+	public class AlbumsController : Controller
 	{
 		public IHttpResponse All(IHttpRequest request)
 		{

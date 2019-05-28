@@ -1,12 +1,13 @@
 ﻿using IRunes.App.Extensions;
 using IRunes.Data;
 using IRunes.Models;
+using MvcFramework;
 using MvcFramework.HTTP.Requests.Contracts;
 using MvcFramework.HTTP.Responses.Contracts;
 
 namespace IRunes.App.Controllers
 {
-	public class TracksController : BaseController
+	public class TracksController : Controller
 	{
 		public IHttpResponse Create(IHttpRequest request)
 		{

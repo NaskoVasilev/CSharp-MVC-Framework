@@ -1,13 +1,14 @@
 ﻿using IRunes.App.Services;
 using IRunes.Data;
 using IRunes.Models;
+using MvcFramework;
 using MvcFramework.HTTP.Requests.Contracts;
 using MvcFramework.HTTP.Responses.Contracts;
 using System.Linq;
 
 namespace IRunes.App.Controllers
 {
-	public class UsersController : BaseController
+	public class UsersController : Controller
 	{
 		private readonly IPasswordService passwordService;
 		private readonly UserManager userManager;

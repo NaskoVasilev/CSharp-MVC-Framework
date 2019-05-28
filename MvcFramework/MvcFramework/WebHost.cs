@@ -10,6 +10,9 @@ namespace MvcFramework
 			IServerRoutingTable serverRoutingTable = new ServerRoutingTable();
 
 			application.Configure(serverRoutingTable);
+
+			Server server = new Server(8000, serverRoutingTable);
+			server.Run();
 		}
 	}
 }
