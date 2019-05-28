@@ -33,7 +33,6 @@ namespace MvcFramework
 
 			while (isRunning)
 			{
-				Console.WriteLine("Waiting for client...");
 				Socket client = listener.AcceptSocketAsync().GetAwaiter().GetResult();
 				Task.Run(() => Listen(client));
 			}
