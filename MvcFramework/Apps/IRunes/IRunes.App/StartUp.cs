@@ -1,30 +1,24 @@
-﻿namespace IRunes.App
+﻿using IRunes.App.Controllers;
+using IRunes.Data;
+using MvcFramework;
+using MvcFramework.HTTP.Enums;
+using MvcFramework.Results;
+using MvcFramework.Routing;
+using System;
+
+namespace IRunes.App
 {
-	using Data;
-	using IRunes.App.Controllers;
-	using MvcFramework;
-	using MvcFramework.HTTP.Enums;
-	using MvcFramework.Results;
-	using MvcFramework.Routing;
+	public class Startup : IMvcApplication
+	{
+		public void Configure()
+		{
+			using (var context = new RunesDbContext())
+			{
+				context.Database.EnsureCreated();
+			}
 
-	public class Launcher
-    {
-        public static void Main(string[] args)
-        {
-            using (var context = new RunesDbContext())
-            {
-                context.Database.EnsureCreated();
-            }
+			ServerRoutingTable serverRoutingTable = new ServerRoutingTable();
 
-            ServerRoutingTable serverRoutingTable = new ServerRoutingTable();
-            Configure(serverRoutingTable);
-
-            Server server = new Server(8000, serverRoutingTable);
-            server.Run();
-        }
-
-        private static void Configure(ServerRoutingTable serverRoutingTable)
-        {
 			#region Home Routes
 			serverRoutingTable.Add(HttpRequestMethod.Get, "/", request => new RedirectResult("/Home/Index"));
 			serverRoutingTable.Add(HttpRequestMethod.Get, "/Home/Index", request => new HomeController().Index(request));
@@ -50,6 +44,14 @@
 			serverRoutingTable.Add(HttpRequestMethod.Post, "/Tracks/Create", request => new TracksController().CreateConfirm(request));
 			serverRoutingTable.Add(HttpRequestMethod.Get, "/Tracks/Details", request => new TracksController().Details(request));
 			#endregion
+
+			Server server = new Server(8000, serverRoutingTable);
+			server.Run();
+		}
+
+		public void ConfigureServices()
+		{
+			throw new NotImplementedException();
 		}
 	}
 }
