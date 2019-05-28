@@ -27,14 +27,14 @@ namespace MvcFramework.HTTP.Sessions
 			parameters.Clear();
 		}
 
-		public bool ConstainsParameter(string name)
+		public bool ContainsParameter(string name)
 		{
 			return parameters.ContainsKey(name);
 		}
 
 		public object GetParameter(string name)
 		{
-			if (!ConstainsParameter(name))
+			if (!ContainsParameter(name))
 			{
 				throw new ArgumentException(string.Format(GlobalConstants.ParameterDoesNotExists, name));
 			}

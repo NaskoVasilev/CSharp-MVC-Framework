@@ -6,7 +6,7 @@
 
 		object GetParameter(string name);
 
-		bool ConstainsParameter(string name);
+		bool ContainsParameter(string name);
 
 		void AddParameter(string name, object parameter);
 
