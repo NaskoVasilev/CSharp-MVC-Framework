@@ -2,6 +2,7 @@
 using IRunes.Data;
 using IRunes.Models;
 using MvcFramework;
+using MvcFramework.Attributes;
 using MvcFramework.HTTP.Requests.Contracts;
 using MvcFramework.HTTP.Responses.Contracts;
 using System.Linq;
@@ -19,12 +20,13 @@ namespace IRunes.App.Controllers
 			this.userManager = new UserManager();
 		}
 
-		public IHttpResponse Login()
+		public IHttpResponse Login(IHttpRequest request)
 		{
 			return View();
 		}
 
-		public IHttpResponse Login(IHttpRequest httpRequest)
+		[HttpPost(ActionName = nameof(Login))]
+		public IHttpResponse LoginConfirm(IHttpRequest httpRequest)
 		{
 			string username = httpRequest.FormData["username"].ToString();
 			string password = httpRequest.FormData["password"].ToString();
@@ -46,12 +48,13 @@ namespace IRunes.App.Controllers
 			return this.Redirect("/");
 		}
 
-		public IHttpResponse Register()
+		public IHttpResponse Register(IHttpRequest request)
 		{
 			return View();
 		}
 
-		public IHttpResponse Register(IHttpRequest httpRequest)
+		[HttpPost(ActionName = nameof(Register))]
+		public IHttpResponse RegisterConfirm(IHttpRequest httpRequest)
 		{
 			string username = httpRequest.FormData["username"].ToString();
 			string email = httpRequest.FormData["email"].ToString();

@@ -2,6 +2,7 @@
 using IRunes.Data;
 using IRunes.Models;
 using MvcFramework;
+using MvcFramework.Attributes;
 using MvcFramework.HTTP.Requests.Contracts;
 using MvcFramework.HTTP.Responses.Contracts;
 
@@ -20,6 +21,7 @@ namespace IRunes.App.Controllers
 			return View();
 		}
 
+		[HttpPost(ActionName = nameof(Create))]
 		public IHttpResponse CreateConfirm(IHttpRequest request)
 		{
 			if (!this.IsLogedIn(request))
@@ -67,6 +69,11 @@ namespace IRunes.App.Controllers
 			}
 
 			return View();
+		}
+
+		public override string ToString()
+		{
+			return base.ToString();
 		}
 	}
 }

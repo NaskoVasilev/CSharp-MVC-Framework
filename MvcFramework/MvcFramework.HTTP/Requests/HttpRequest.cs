@@ -10,6 +10,7 @@ using MvcFramework.HTTP.Sessions.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text.RegularExpressions;
 
 namespace MvcFramework.HTTP.Requests
@@ -136,7 +137,7 @@ namespace MvcFramework.HTTP.Requests
 			{
 				string[] keyValuePair = parameter.Split('=');
 				//TODO fix if have parameters with equal names
-				this.QueryData.Add(keyValuePair[0], keyValuePair[1]);
+				this.QueryData.Add(WebUtility.UrlDecode(keyValuePair[0]),WebUtility.UrlDecode(keyValuePair[1]));
 			}
 		}
 		private void ParseFormDataParameters(string formData)
@@ -152,7 +153,7 @@ namespace MvcFramework.HTTP.Requests
 			{
 				string[] keyValuePair = parameter.Split('=');
 				//TODO fix if have parametesr with equal names
-				this.FormData.Add(keyValuePair[0], keyValuePair[1]);
+				this.FormData.Add(WebUtility.UrlDecode(keyValuePair[0]), WebUtility.UrlDecode(keyValuePair[1]));
 			}
 		}
 		private void ParseRequestParameters(string formData)
