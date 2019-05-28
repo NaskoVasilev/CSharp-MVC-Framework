@@ -2,7 +2,7 @@
 using MvcFramework.HTTP.Headers;
 using MvcFramework.HTTP.Responses;
 
-namespace MvcFramework.WebServer.Results
+namespace MvcFramework.Results
 {
 	public class InlineResourceResult : HttpResponse
 	{

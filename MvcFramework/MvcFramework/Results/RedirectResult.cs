@@ -3,7 +3,7 @@ using MvcFramework.HTTP.Enums;
 using MvcFramework.HTTP.Headers;
 using MvcFramework.HTTP.Responses;
 
-namespace MvcFramework.WebServer.Results
+namespace MvcFramework.Results
 {
 	public class RedirectResult : HttpResponse
 	{

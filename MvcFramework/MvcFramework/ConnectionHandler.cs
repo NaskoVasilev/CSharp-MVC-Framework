@@ -5,9 +5,9 @@ using MvcFramework.HTTP.Exceptions;
 using MvcFramework.HTTP.Requests;
 using MvcFramework.HTTP.Requests.Contracts;
 using MvcFramework.HTTP.Responses.Contracts;
-using MvcFramework.WebServer.Results;
-using MvcFramework.WebServer.Routing.Contracts;
-using MvcFramework.WebServer.Sessions;
+using MvcFramework.Results;
+using MvcFramework.Routing.Contracts;
+using MvcFramework.Sessions;
 using System;
 using System.IO;
 using System.Net.Sockets;
@@ -15,7 +15,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MvcFramework.WebServer
+namespace MvcFramework
 {
 	public class ConnectionHandler
 	{
@@ -57,8 +57,8 @@ namespace MvcFramework.WebServer
 				httpResponse = new TextResult(e.Message, HttpResponseStatusCode.InernalServerError);
 			}
 
-			await this.PrepareResponseAsync(httpResponse);
-			this.client.Shutdown(SocketShutdown.Both);
+			await PrepareResponseAsync(httpResponse);
+			client.Shutdown(SocketShutdown.Both);
 		}
 
 		private async Task<IHttpRequest> ReadRequestAsync()
@@ -68,7 +68,7 @@ namespace MvcFramework.WebServer
 
 			while (true)
 			{
-				int numberOfBytesRead = await this.client.ReceiveAsync(data.Array, SocketFlags.None);
+				int numberOfBytesRead = await client.ReceiveAsync(data.Array, SocketFlags.None);
 
 				if (numberOfBytesRead == 0)
 				{
@@ -95,12 +95,12 @@ namespace MvcFramework.WebServer
 
 		private IHttpResponse HandleRequest(IHttpRequest httpRequest)
 		{
-			if (!this.serverRoutingTable.Contains(httpRequest.RequestMethod, httpRequest.Path))
+			if (!serverRoutingTable.Contains(httpRequest.RequestMethod, httpRequest.Path))
 			{
-				return this.ReturnIfResource(httpRequest);
+				return ReturnIfResource(httpRequest);
 			}
 
-			IHttpResponse httpResponse = this.serverRoutingTable.Get(httpRequest.RequestMethod, httpRequest.Path)
+			IHttpResponse httpResponse = serverRoutingTable.Get(httpRequest.RequestMethod, httpRequest.Path)
 				.Invoke(httpRequest);
 			return httpResponse;
 		}

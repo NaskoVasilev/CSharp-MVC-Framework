@@ -1,11 +1,10 @@
 ﻿using MvcFramework.HTTP.Common;
-using MvcFramework.HTTP.Cookies;
 using MvcFramework.HTTP.Enums;
 using MvcFramework.HTTP.Headers;
 using MvcFramework.HTTP.Responses;
 using System.Text;
 
-namespace MvcFramework.WebServer.Results
+namespace MvcFramework.Results
 {
 	public class HtmlResult : HttpResponse
 	{

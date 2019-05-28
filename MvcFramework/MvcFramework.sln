@@ -5,8 +5,6 @@ VisualStudioVersion = 16.0.28803.352
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MvcFramework.HTTP", "MvcFramework.HTTP\MvcFramework.HTTP.csproj", "{1B67A3B9-0A86-494C-849C-CFD40F4196C6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MvcFramework.WebServer", "MvcFramework.WebServer\MvcFramework.WebServer.csproj", "{4F35FFF1-71B0-4576-A66C-3239135F7310}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Apps", "Apps", "{777C9434-4EA1-4377-9514-0FB960FDDBD1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IRunes", "IRunes", "{4F8717BC-850D-4D60-8EE9-FECFCAF6B7CA}"
@@ -16,6 +14,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRunes.Data", "Apps\IRunes\IRunes.Data\IRunes.Data.csproj", "{02B8626D-3A81-43E0-A72C-BD1184D83C99}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRunes.Models", "Apps\IRunes\IRunes.Models\IRunes.Models.csproj", "{9B2023BC-9242-4B07-BB51-B5D963AE531A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MvcFramework", "MvcFramework\MvcFramework.csproj", "{D7F9BFE8-3C1A-49E9-AF13-D70DEBE89576}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,10 +27,6 @@ Global
 		{1B67A3B9-0A86-494C-849C-CFD40F4196C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1B67A3B9-0A86-494C-849C-CFD40F4196C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1B67A3B9-0A86-494C-849C-CFD40F4196C6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4F35FFF1-71B0-4576-A66C-3239135F7310}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4F35FFF1-71B0-4576-A66C-3239135F7310}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4F35FFF1-71B0-4576-A66C-3239135F7310}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4F35FFF1-71B0-4576-A66C-3239135F7310}.Release|Any CPU.Build.0 = Release|Any CPU
 		{886D2012-03B5-4B7B-95CA-B13222013313}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{886D2012-03B5-4B7B-95CA-B13222013313}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{886D2012-03B5-4B7B-95CA-B13222013313}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -43,6 +39,10 @@ Global
 		{9B2023BC-9242-4B07-BB51-B5D963AE531A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9B2023BC-9242-4B07-BB51-B5D963AE531A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9B2023BC-9242-4B07-BB51-B5D963AE531A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7F9BFE8-3C1A-49E9-AF13-D70DEBE89576}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7F9BFE8-3C1A-49E9-AF13-D70DEBE89576}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7F9BFE8-3C1A-49E9-AF13-D70DEBE89576}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7F9BFE8-3C1A-49E9-AF13-D70DEBE89576}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

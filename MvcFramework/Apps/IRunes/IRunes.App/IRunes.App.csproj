@@ -7,7 +7,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\MvcFramework.HTTP\MvcFramework.HTTP.csproj" />
-    <ProjectReference Include="..\..\..\MvcFramework.WebServer\MvcFramework.WebServer.csproj" />
+    <ProjectReference Include="..\..\..\MvcFramework\MvcFramework.csproj" />
     <ProjectReference Include="..\IRunes.Data\IRunes.Data.csproj" />
   </ItemGroup>
 

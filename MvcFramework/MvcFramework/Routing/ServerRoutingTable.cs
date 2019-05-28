@@ -4,9 +4,9 @@ using MvcFramework.HTTP.Common;
 using MvcFramework.HTTP.Enums;
 using MvcFramework.HTTP.Requests.Contracts;
 using MvcFramework.HTTP.Responses.Contracts;
-using MvcFramework.WebServer.Routing.Contracts;
+using MvcFramework.Routing.Contracts;
 
-namespace MvcFramework.WebServer.Routing
+namespace MvcFramework.Routing
 {
 	public class ServerRoutingTable : IServerRoutingTable
 	{
@@ -14,7 +14,7 @@ namespace MvcFramework.WebServer.Routing
 
 		public ServerRoutingTable()
 		{
-			this.routes = new Dictionary<HttpRequestMethod, Dictionary<string, Func<IHttpRequest, IHttpResponse>>>()
+			routes = new Dictionary<HttpRequestMethod, Dictionary<string, Func<IHttpRequest, IHttpResponse>>>()
 			{
 				[HttpRequestMethod.Delete] = new Dictionary<string, Func<IHttpRequest, IHttpResponse>>(),
 				[HttpRequestMethod.Get] = new Dictionary<string, Func<IHttpRequest, IHttpResponse>>(),
@@ -30,7 +30,7 @@ namespace MvcFramework.WebServer.Routing
 			CoreValidator.ThrowIfNullOrEmpty(path, nameof(path));
 			CoreValidator.ThrowIfNull(func, nameof(func));
 
-			this.routes[method][path] = func;
+			routes[method][path] = func;
 		}
 
 		public bool Contains(HttpRequestMethod method, string path)
@@ -38,15 +38,15 @@ namespace MvcFramework.WebServer.Routing
 			CoreValidator.ThrowIfNull(method, nameof(method));
 			CoreValidator.ThrowIfNullOrEmpty(path, nameof(path));
 
-			bool contains = this.routes.ContainsKey(method) && this.routes[method].ContainsKey(path);
+			bool contains = routes.ContainsKey(method) && routes[method].ContainsKey(path);
 			return contains;
 		}
 
 		public Func<IHttpRequest, IHttpResponse> Get(HttpRequestMethod method, string path)
 		{
-			if(this.Contains(method, path))
+			if (Contains(method, path))
 			{
-				return this.routes[method][path];
+				return routes[method][path];
 			}
 
 			return null;

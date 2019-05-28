@@ -1,7 +1,7 @@
 ﻿using MvcFramework.HTTP.Enums;
 using MvcFramework.HTTP.Requests.Contracts;
 using MvcFramework.HTTP.Responses.Contracts;
-using MvcFramework.WebServer.Results;
+using MvcFramework.Results;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.CompilerServices;

@@ -1,12 +1,10 @@
-﻿using MvcFramework.WebServer.Routing.Contracts;
+﻿using MvcFramework.Routing.Contracts;
 using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace MvcFramework.WebServer
+namespace MvcFramework
 {
 	public class Server
 	{
@@ -24,26 +22,26 @@ namespace MvcFramework.WebServer
 		{
 			this.port = port;
 			this.serverRoutingTable = serverRoutingTable;
-			this.listener = new TcpListener(IPAddress.Parse(LocalhostIpAdderss), port);
+			listener = new TcpListener(IPAddress.Parse(LocalhostIpAdderss), port);
 		}
 
 		public void Run()
 		{
-			this.listener.Start();
-			this.isRunning = true;
-			Console.WriteLine($"Server start at http://{LocalhostIpAdderss}:{this.port}");
+			listener.Start();
+			isRunning = true;
+			Console.WriteLine($"Server start at http://{LocalhostIpAdderss}:{port}");
 
 			while (isRunning)
 			{
 				Console.WriteLine("Waiting for client...");
-				Socket client = this.listener.AcceptSocketAsync().GetAwaiter().GetResult();
-				Task.Run(() => this.Listen(client));
+				Socket client = listener.AcceptSocketAsync().GetAwaiter().GetResult();
+				Task.Run(() => Listen(client));
 			}
 		}
 
 		private async Task Listen(Socket client)
 		{
-			ConnectionHandler connectionHandler = new ConnectionHandler(client, this.serverRoutingTable);
+			ConnectionHandler connectionHandler = new ConnectionHandler(client, serverRoutingTable);
 			await connectionHandler.ProccessRequestAsync();
 		}
 	}

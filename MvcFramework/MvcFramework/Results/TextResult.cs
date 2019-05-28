@@ -2,11 +2,9 @@
 using MvcFramework.HTTP.Enums;
 using MvcFramework.HTTP.Headers;
 using MvcFramework.HTTP.Responses;
-using System;
-using System.Collections.Generic;
 using System.Text;
 
-namespace MvcFramework.WebServer.Results
+namespace MvcFramework.Results
 {
 	public class TextResult : HttpResponse
 	{

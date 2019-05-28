@@ -3,7 +3,7 @@ using MvcFramework.HTTP.Requests.Contracts;
 using MvcFramework.HTTP.Responses.Contracts;
 using System;
 
-namespace MvcFramework.WebServer.Routing.Contracts
+namespace MvcFramework.Routing.Contracts
 {
 	public interface IServerRoutingTable
 	{
