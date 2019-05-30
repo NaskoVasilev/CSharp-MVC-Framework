@@ -7,6 +7,7 @@ using MvcFramework.Routing;
 using MvcFramework.Routing.Contracts;
 using MvcFramework.HTTP.Responses.Contracts;
 using MvcFramework.Attributes.Http;
+using MvcFramework.Attributes.Action;
 
 namespace MvcFramework
 {
@@ -33,7 +34,7 @@ namespace MvcFramework
 			{
 				IEnumerable<MethodInfo> actions = controller.GetMethods(BindingFlags.DeclaredOnly |
 					BindingFlags.Instance | BindingFlags.Public)
-					.Where(m => !m.IsSpecialName && !m.IsVirtual);
+					.Where(m => !m.IsSpecialName && !m.IsVirtual && m.GetCustomAttribute<NonActionAttribute>() == null);
 
 				string controllerName = controller.Name.Replace("Controller", "");
 
