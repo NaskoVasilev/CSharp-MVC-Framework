@@ -1,6 +1,6 @@
 ﻿using MvcFramework.HTTP.Enums;
 
-namespace MvcFramework.Attributes
+namespace MvcFramework.Attributes.Http
 {
 	public class HttpPutAttribute : BaseHttpAttribute
 	{

@@ -1,7 +1,7 @@
 ﻿using MvcFramework.HTTP.Enums;
 using System;
 
-namespace MvcFramework.Attributes
+namespace MvcFramework.Attributes.Http
 {
 	public abstract class BaseHttpAttribute : Attribute
 	{
@@ -17,12 +17,12 @@ namespace MvcFramework.Attributes
 
 		public BaseHttpAttribute(string url)
 		{
-			this.Url = url;
+			Url = url;
 		}
 
 		public BaseHttpAttribute(string url, string actionName) : this(url)
 		{
-			this.ActionName = actionName;
+			ActionName = actionName;
 		}
 	}
 }

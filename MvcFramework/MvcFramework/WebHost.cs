@@ -5,8 +5,8 @@ using System.Reflection;
 using MvcFramework.HTTP.Enums;
 using MvcFramework.Routing;
 using MvcFramework.Routing.Contracts;
-using MvcFramework.Attributes;
 using MvcFramework.HTTP.Responses.Contracts;
+using MvcFramework.Attributes.Http;
 
 namespace MvcFramework
 {

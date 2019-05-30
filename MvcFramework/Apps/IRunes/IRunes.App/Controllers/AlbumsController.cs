@@ -2,7 +2,7 @@
 using IRunes.Data;
 using IRunes.Models;
 using MvcFramework;
-using MvcFramework.Attributes;
+using MvcFramework.Attributes.Http;
 using MvcFramework.HTTP.Requests.Contracts;
 using MvcFramework.HTTP.Responses.Contracts;
 using System.Linq;

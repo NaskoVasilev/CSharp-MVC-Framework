@@ -1,7 +1,6 @@
-﻿using System;
-using MvcFramework.HTTP.Enums;
+﻿using MvcFramework.HTTP.Enums;
 
-namespace MvcFramework.Attributes
+namespace MvcFramework.Attributes.Http
 {
 	public class HttpGetAttribute : BaseHttpAttribute
 	{
