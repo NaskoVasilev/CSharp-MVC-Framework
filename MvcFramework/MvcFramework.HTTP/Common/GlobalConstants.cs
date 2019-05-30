@@ -12,25 +12,11 @@
 
 		public const string QueryStringExceptionMessage = "The query string is not valid.";
 
-		public const string ContentTypeHeaderKey = "Content-Type";
-
-		public const string LocationHeaderKey = "Location";
-
-		public const string ContentTypeHeaderTextValue = "text/plain; charset=utf-8";
-
-		public const string ContentTypeHeaderHtmlValue = "text/html; charset=utf-8";
-
-		public const string ContentTypeHeaderJsonValue = "application/json";
-
 		public const string RouteNotFound = "Route with method: {0} and path: {1} not found.";
 
 		public const string InvalidCookieKey = "There is no cookie with key: {0}.";
 
 		public const string DuplicateCookieKey = "There is already cookie with key: {0} in the cookie collection.";
-
-		public const string SetCookieKey = "Set-Cookie";
-
-		public const string CookieHeaderKey = "Cookie";
 
 		public const string ParameterDoesNotExists = "There is no parameter with name: {0} in the session";
 

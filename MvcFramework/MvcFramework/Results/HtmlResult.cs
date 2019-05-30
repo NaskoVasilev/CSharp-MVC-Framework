@@ -1,5 +1,6 @@
 ﻿using MvcFramework.HTTP.Common;
 using MvcFramework.HTTP.Enums;
+using MvcFramework.HTTP.Headers;
 using System.Text;
 
 namespace MvcFramework.Results
@@ -8,7 +9,7 @@ namespace MvcFramework.Results
 	{
 		public HtmlResult(string content, HttpResponseStatusCode statusCode) : base(statusCode)
 		{
-			this.AddHeader(GlobalConstants.ContentTypeHeaderKey, GlobalConstants.ContentTypeHeaderHtmlValue);
+			this.AddHeader(HttpHeader.ContentType, MimeTypes.TextHtml);
 			this.Content = Encoding.UTF8.GetBytes(content);
 		}
 	}

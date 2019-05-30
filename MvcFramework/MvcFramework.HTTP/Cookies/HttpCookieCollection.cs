@@ -1,5 +1,6 @@
 ﻿using MvcFramework.HTTP.Common;
 using MvcFramework.HTTP.Cookies.Contracts;
+using MvcFramework.HTTP.Headers;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -56,7 +57,7 @@ namespace MvcFramework.HTTP.Cookies
 			StringBuilder sb = new StringBuilder();
 			foreach (var cookie in httpCookies.Values)
 			{
-				sb.Append($"{GlobalConstants.SetCookieKey}: {cookie}{GlobalConstants.HttpNewLine}");
+				sb.Append($"{HttpHeader.SetCookie}: {cookie}{GlobalConstants.HttpNewLine}");
 			}
 
 			return sb.ToString();

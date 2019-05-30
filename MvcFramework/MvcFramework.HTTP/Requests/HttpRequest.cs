@@ -99,9 +99,9 @@ namespace MvcFramework.HTTP.Requests
 
 		private void ParseRequestCokies()
 		{
-			if (this.Headers.ContainsHeader(GlobalConstants.CookieHeaderKey))
+			if (this.Headers.ContainsHeader(HttpHeader.Cookie))
 			{
-				string cookieValue = this.Headers.GetHeader(GlobalConstants.CookieHeaderKey).Value;
+				string cookieValue = this.Headers.GetHeader(HttpHeader.Cookie).Value;
 				var unparsedCookies = cookieValue.Split("; ", StringSplitOptions.RemoveEmptyEntries);
 
 				foreach (var cookieKeyValuePairString in unparsedCookies)
