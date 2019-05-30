@@ -1,11 +1,10 @@
 ﻿using MvcFramework.HTTP.Common;
 using MvcFramework.HTTP.Enums;
 using MvcFramework.HTTP.Headers;
-using MvcFramework.HTTP.Responses;
 
 namespace MvcFramework.Results
 {
-	public class RedirectResult : HttpResponse
+	public class RedirectResult : ActionResult
 	{
 		public RedirectResult(string location) : base(HttpResponseStatusCode.SeeOther)
 		{

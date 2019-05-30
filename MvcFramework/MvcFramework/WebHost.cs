@@ -43,8 +43,7 @@ namespace MvcFramework
 					string path = $"/{controllerName}/{action.Name}";
 
 					BaseHttpAttribute attribute = action.GetCustomAttributes()
-						.Where(a => a.GetType().IsSubclassOf(typeof(BaseHttpAttribute)))
-						.LastOrDefault() as BaseHttpAttribute;
+						.LastOrDefault(a => a.GetType().IsSubclassOf(typeof(BaseHttpAttribute))) as BaseHttpAttribute;
 
 					HttpRequestMethod requestMethod = HttpRequestMethod.Get;
 

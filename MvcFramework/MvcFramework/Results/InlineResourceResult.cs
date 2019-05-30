@@ -1,10 +1,9 @@
 ﻿using MvcFramework.HTTP.Enums;
 using MvcFramework.HTTP.Headers;
-using MvcFramework.HTTP.Responses;
 
 namespace MvcFramework.Results
 {
-	public class InlineResourceResult : HttpResponse
+	public class InlineResourceResult : ActionResult
 	{
 		public InlineResourceResult(byte[] content, HttpResponseStatusCode statusCode) : base(statusCode)
 		{

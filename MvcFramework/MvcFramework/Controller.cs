@@ -2,8 +2,8 @@
 using MvcFramework.HTTP.Requests.Contracts;
 using MvcFramework.HTTP.Responses.Contracts;
 using MvcFramework.Results;
+using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Runtime.CompilerServices;
 
 namespace MvcFramework
@@ -17,17 +17,17 @@ namespace MvcFramework
 			ViewData = new Dictionary<string, object>();
 		}
 
-		protected IHttpResponse View([CallerMemberName] string view = null)
+		protected IActionResult View([CallerMemberName] string view = null)
 		{
 			string controllerName = GetType().Name.Replace("Controller", "");
 			string path = $"Views/{controllerName}/{view}.html";
-			string viewContent = File.ReadAllText(path);
+			string viewContent = System.IO.File.ReadAllText(path);
 			viewContent = ParseTemplate(viewContent);
 
 			return new HtmlResult(viewContent, HttpResponseStatusCode.Ok);
 		}
 
-		protected IHttpResponse Redirect(string url)
+		protected IActionResult Redirect(string url)
 		{
 			return new RedirectResult(url);
 		}
@@ -49,6 +49,21 @@ namespace MvcFramework
 			}
 
 			return null;
+		}
+
+		protected IActionResult Xml(object data)
+		{
+			throw new NotImplementedException();
+		}
+
+		protected IActionResult Json(object data)
+		{
+			throw new NotImplementedException();
+		}
+
+		protected IActionResult File(string path)
+		{
+			throw new NotImplementedException();
 		}
 
 		private string ParseTemplate(string template)

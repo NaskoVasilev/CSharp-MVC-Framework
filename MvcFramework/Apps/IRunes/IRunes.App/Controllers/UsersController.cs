@@ -4,7 +4,7 @@ using IRunes.Models;
 using MvcFramework;
 using MvcFramework.Attributes.Http;
 using MvcFramework.HTTP.Requests.Contracts;
-using MvcFramework.HTTP.Responses.Contracts;
+using MvcFramework.Results;
 using System.Linq;
 
 namespace IRunes.App.Controllers
@@ -20,13 +20,13 @@ namespace IRunes.App.Controllers
 			this.userManager = new UserManager();
 		}
 
-		public IHttpResponse Login(IHttpRequest request)
+		public IActionResult Login(IHttpRequest request)
 		{
 			return View();
 		}
 
 		[HttpPost(ActionName = nameof(Login))]
-		public IHttpResponse LoginConfirm(IHttpRequest httpRequest)
+		public IActionResult LoginConfirm(IHttpRequest httpRequest)
 		{
 			string username = httpRequest.FormData["username"].ToString();
 			string password = httpRequest.FormData["password"].ToString();
@@ -48,13 +48,13 @@ namespace IRunes.App.Controllers
 			return this.Redirect("/");
 		}
 
-		public IHttpResponse Register(IHttpRequest request)
+		public IActionResult Register(IHttpRequest request)
 		{
 			return View();
 		}
 
 		[HttpPost(ActionName = nameof(Register))]
-		public IHttpResponse RegisterConfirm(IHttpRequest httpRequest)
+		public IActionResult RegisterConfirm(IHttpRequest httpRequest)
 		{
 			string username = httpRequest.FormData["username"].ToString();
 			string email = httpRequest.FormData["email"].ToString();
@@ -88,7 +88,7 @@ namespace IRunes.App.Controllers
 			return this.Redirect("/");
 		}
 
-		public IHttpResponse Logout(IHttpRequest request)
+		public IActionResult Logout(IHttpRequest request)
 		{
 			userManager.SignOut(request);
 			return Redirect("/");

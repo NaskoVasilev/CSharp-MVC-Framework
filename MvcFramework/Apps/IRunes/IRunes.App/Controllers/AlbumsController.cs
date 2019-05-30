@@ -4,14 +4,14 @@ using IRunes.Models;
 using MvcFramework;
 using MvcFramework.Attributes.Http;
 using MvcFramework.HTTP.Requests.Contracts;
-using MvcFramework.HTTP.Responses.Contracts;
+using MvcFramework.Results;
 using System.Linq;
 
 namespace IRunes.App.Controllers
 {
 	public class AlbumsController : Controller
 	{
-		public IHttpResponse All(IHttpRequest request)
+		public IActionResult All(IHttpRequest request)
 		{
 			if (!this.IsLogedIn(request))
 			{
@@ -38,7 +38,7 @@ namespace IRunes.App.Controllers
 			return View();
 		}
 
-		public IHttpResponse Create(IHttpRequest request)
+		public IActionResult Create(IHttpRequest request)
 		{
 			if (!this.IsLogedIn(request))
 			{
@@ -49,7 +49,7 @@ namespace IRunes.App.Controllers
 		}
 
 		[HttpPost(ActionName = nameof(Create))]
-		public IHttpResponse CreateConfirm(IHttpRequest request)
+		public IActionResult CreateConfirm(IHttpRequest request)
 		{
 			if (!this.IsLogedIn(request))
 			{
@@ -68,7 +68,7 @@ namespace IRunes.App.Controllers
 			return Redirect("/Albums/All");
 		}
 
-		public IHttpResponse Details(IHttpRequest request)
+		public IActionResult Details(IHttpRequest request)
 		{
 			if (!this.IsLogedIn(request))
 			{
