@@ -33,10 +33,11 @@ namespace MvcFramework.HTTP.Responses
 
 		public byte[] Content { get; set; }
 
-		public void AddHeader(HttpHeader header)
+		public void AddHeader(string key, string value)
 		{
-			CoreValidator.ThrowIfNull(header, nameof(header));
-			this.Headers.AddHeader(header);
+			CoreValidator.ThrowIfNullOrEmpty(key, nameof(key));
+			CoreValidator.ThrowIfNullOrEmpty(value, nameof(value));
+			this.Headers.AddHeader(new HttpHeader(key, value));
 		}
 
 		public void AddCookie(HttpCookie cookie)

@@ -1,7 +1,6 @@
 ﻿using MvcFramework.HTTP.Cookies;
 using MvcFramework.HTTP.Cookies.Contracts;
 using MvcFramework.HTTP.Enums;
-using MvcFramework.HTTP.Headers;
 using MvcFramework.HTTP.Headers.Contracts;
 
 namespace MvcFramework.HTTP.Responses.Contracts
@@ -16,7 +15,7 @@ namespace MvcFramework.HTTP.Responses.Contracts
 
 		byte[] Content { get; set; }
 
-		void AddHeader(HttpHeader header);
+		void AddHeader(string key, string value);
 
 		void AddCookie(HttpCookie cookie);
 

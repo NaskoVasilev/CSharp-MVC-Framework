@@ -7,8 +7,8 @@ namespace MvcFramework.Results
 	{
 		public InlineResourceResult(byte[] content, HttpResponseStatusCode statusCode) : base(statusCode)
 		{
-			this.Headers.AddHeader(new HttpHeader(HttpHeader.ContentLength, content.Length.ToString()));
-			this.Headers.AddHeader(new HttpHeader(HttpHeader.ContentDisposition, "inline"));
+			this.AddHeader(HttpHeader.ContentLength, content.Length.ToString());
+			this.AddHeader(HttpHeader.ContentDisposition, "inline");
 			this.Content = content;
 		}
 	}

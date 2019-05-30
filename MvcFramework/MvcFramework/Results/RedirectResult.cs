@@ -1,6 +1,5 @@
 ﻿using MvcFramework.HTTP.Common;
 using MvcFramework.HTTP.Enums;
-using MvcFramework.HTTP.Headers;
 
 namespace MvcFramework.Results
 {
@@ -8,7 +7,7 @@ namespace MvcFramework.Results
 	{
 		public RedirectResult(string location) : base(HttpResponseStatusCode.SeeOther)
 		{
-			this.AddHeader(new HttpHeader(GlobalConstants.LocationHeaderKey, location));
+			this.AddHeader(GlobalConstants.LocationHeaderKey, location);
 		}
 	}
 }
