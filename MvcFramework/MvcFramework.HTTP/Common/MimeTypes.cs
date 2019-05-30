@@ -7,5 +7,7 @@
 		public const string TextHtml = "text/html; charset=utf-8";
 
 		public const string ApplicationJson = "application/json";
+
+		public const string ApplicationXml = "application/xml";
 	}
 }

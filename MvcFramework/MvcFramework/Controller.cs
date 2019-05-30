@@ -1,4 +1,5 @@
-﻿using MvcFramework.HTTP.Enums;
+﻿using MvcFramework.Extensions;
+using MvcFramework.HTTP.Enums;
 using MvcFramework.HTTP.Requests.Contracts;
 using MvcFramework.HTTP.Responses.Contracts;
 using MvcFramework.Results;
@@ -51,14 +52,22 @@ namespace MvcFramework
 			return null;
 		}
 
-		protected IActionResult Xml(object data)
+		protected IActionResult Xml(object obj)
 		{
-			throw new NotImplementedException();
+			string xmlContent = obj.ToXml();
+			return new XmlResult(xmlContent);
 		}
 
-		protected IActionResult Json(object data)
+		protected IActionResult Xml(object obj, string rootName)
 		{
-			throw new NotImplementedException();
+			string xmlContent = obj.ToXml(rootName);
+			return new XmlResult(xmlContent);
+		}
+
+		protected IActionResult Json(object obj)
+		{
+			string jsonContent = obj.ToJson();
+			return new JsonResult(jsonContent);
 		}
 
 		protected IActionResult File(string path)
