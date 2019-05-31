@@ -5,11 +5,11 @@ namespace MvcFramework.Results
 {
 	public class FileResult : ActionResult
 	{
-		public FileResult(byte[] fileContent, HttpResponseStatusCode statusCode = HttpResponseStatusCode.Ok) 
+		public FileResult(byte[] fileContent,string fileName, HttpResponseStatusCode statusCode = HttpResponseStatusCode.Ok) 
 			: base(statusCode)
 		{
 			this.AddHeader(HttpHeader.ContentLength, fileContent.Length.ToString());
-			this.AddHeader(HttpHeader.ContentDisposition, "attachment");
+			this.AddHeader(HttpHeader.ContentDisposition, $"attachment; filename={fileName}");
 			this.Content = fileContent;
 		}
 	}

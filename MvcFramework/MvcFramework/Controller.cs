@@ -1,4 +1,5 @@
 ﻿using MvcFramework.Extensions;
+using MvcFramework.HTTP.Common;
 using MvcFramework.HTTP.Enums;
 using MvcFramework.HTTP.Requests.Contracts;
 using MvcFramework.HTTP.Responses.Contracts;
@@ -70,9 +71,14 @@ namespace MvcFramework
 			return new JsonResult(jsonContent);
 		}
 
-		protected IActionResult File(string path)
+		protected IActionResult File(byte[] fileContent, string fileName = "file.txt")
 		{
-			throw new NotImplementedException();
+			return new FileResult(fileContent, fileName);
+		}
+
+		protected IActionResult NotFound(string message = GlobalConstants.NotFoundDefaultMessage)
+		{
+			return new NotFoundResult(message);
 		}
 
 		private string ParseTemplate(string template)
