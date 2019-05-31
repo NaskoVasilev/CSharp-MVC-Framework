@@ -1,6 +1,6 @@
 ﻿using IRunes.App.Extensions;
-using IRunes.Data;
 using IRunes.Models;
+using IRunes.Services;
 using MvcFramework;
 using MvcFramework.Attributes.Http;
 using MvcFramework.Attributes.Security;
@@ -12,23 +12,27 @@ namespace IRunes.App.Controllers
 	[Authorize]
 	public class AlbumsController : Controller
 	{
+		private readonly IAlbumService albumService;
+
+		public AlbumsController()
+		{
+			albumService = new AlbumService();
+		}
+
 		public IActionResult All()
 		{
-			using (var context = new RunesDbContext())
-			{
-				var albums = context.Albums
-					.ToList()
-					.Select(a => a.ToHtml())
-					.ToList();
 
-				if(albums.Count == 0)
-				{
-					ViewData["albums"] = "There are currently no albums.";
-				}
-				else
-				{
-					ViewData["albums"] = string.Join("", albums);
-				}
+			var albums = albumService.GetAllAlbums()
+				.Select(a => a.ToHtml())
+				.ToList();
+
+			if (albums.Count == 0)
+			{
+				ViewData["albums"] = "There are currently no albums.";
+			}
+			else
+			{
+				ViewData["albums"] = string.Join("", albums);
 			}
 
 			return View();
@@ -45,11 +49,8 @@ namespace IRunes.App.Controllers
 			string name = Request.FormData["name"].ToString();
 			string cover = Request.FormData["cover"].ToString();
 
-			using (var context = new RunesDbContext())
-			{
-				context.Albums.Add(new Album { Name = name, Cover = cover });
-				context.SaveChanges();
-			}
+			Album album = new Album { Name = name, Cover = cover };
+			albumService.CreateAlbum(album);
 
 			return Redirect("/Albums/All");
 		}
@@ -58,19 +59,16 @@ namespace IRunes.App.Controllers
 		{
 			string id = Request.QueryData["id"].ToString();
 
-			using(var context = new RunesDbContext())
-			{
-				var album = context.Albums.FirstOrDefault(a => a.Id == id);
-				ViewData["album"] = album.AlbumDetailsToHtml();
-				ViewData["cover"] = album.Cover;
-				ViewData["createTrackHref"] = $"/Tracks/Create?albumId={album.Id}";
 
-				var tracks = context.Tracks
-					.Where(t => t.AlbumId == album.Id)
-					.ToList()
-					.Select(t => t.TrackDetailsToHtml());
-				ViewData["tracks"] = string.Join("", tracks);
-			}
+			var album = albumService.GetAlbumById(id);
+			ViewData["album"] = album.AlbumDetailsToHtml();
+			ViewData["cover"] = album.Cover;
+			ViewData["createTrackHref"] = $"/Tracks/Create?albumId={album.Id}";
+
+			var tracks = album.Tracks
+				.ToList()
+				.Select(t => t.TrackDetailsToHtml());
+			ViewData["tracks"] = string.Join("", tracks);
 
 			return View();
 		}

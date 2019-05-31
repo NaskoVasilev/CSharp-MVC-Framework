@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRunes.Models", "Apps\IRune
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MvcFramework", "MvcFramework\MvcFramework.csproj", "{D7F9BFE8-3C1A-49E9-AF13-D70DEBE89576}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IRunes.Services", "Apps\IRunes\IRunes.Services\IRunes.Services.csproj", "{CE86BCCB-E2FB-43D9-A690-37310EB488AF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +45,10 @@ Global
 		{D7F9BFE8-3C1A-49E9-AF13-D70DEBE89576}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D7F9BFE8-3C1A-49E9-AF13-D70DEBE89576}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D7F9BFE8-3C1A-49E9-AF13-D70DEBE89576}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE86BCCB-E2FB-43D9-A690-37310EB488AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE86BCCB-E2FB-43D9-A690-37310EB488AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE86BCCB-E2FB-43D9-A690-37310EB488AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE86BCCB-E2FB-43D9-A690-37310EB488AF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -52,6 +58,7 @@ Global
 		{886D2012-03B5-4B7B-95CA-B13222013313} = {4F8717BC-850D-4D60-8EE9-FECFCAF6B7CA}
 		{02B8626D-3A81-43E0-A72C-BD1184D83C99} = {4F8717BC-850D-4D60-8EE9-FECFCAF6B7CA}
 		{9B2023BC-9242-4B07-BB51-B5D963AE531A} = {4F8717BC-850D-4D60-8EE9-FECFCAF6B7CA}
+		{CE86BCCB-E2FB-43D9-A690-37310EB488AF} = {4F8717BC-850D-4D60-8EE9-FECFCAF6B7CA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {093FC671-6D55-4CA5-AB0F-48AAEB54D746}

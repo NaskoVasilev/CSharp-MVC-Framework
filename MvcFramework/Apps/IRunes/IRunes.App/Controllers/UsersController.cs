@@ -1,20 +1,21 @@
 ﻿using IRunes.App.Services;
-using IRunes.Data;
 using IRunes.Models;
+using IRunes.Services;
 using MvcFramework;
 using MvcFramework.Attributes.Http;
 using MvcFramework.Results;
-using System.Linq;
 
 namespace IRunes.App.Controllers
 {
 	public class UsersController : Controller
 	{
 		private readonly IPasswordService passwordService;
+		private readonly IUserService userService;
 
 		public UsersController()
 		{
 			this.passwordService = new PasswordService();
+			this.userService = new UserService();
 		}
 
 		public IActionResult Login()
@@ -29,18 +30,14 @@ namespace IRunes.App.Controllers
 			string password = Request.FormData["password"].ToString();
 			string hashedPassword = passwordService.HashPassword(password);
 
-			using (var context = new RunesDbContext())
+			User user = userService.GetUserByUsernameAndPassword(username, hashedPassword);
+
+			if (user == null)
 			{
-				User user = context.Users.FirstOrDefault(u => (u.Username == username ||
-				u.Email == username) && u.Password == hashedPassword);
-
-				if (user == null)
-				{
-					return Redirect("/Users/Login");
-				}
-
-				this.SignIn(user.Id, user.Username, user.Email);
+				return Redirect("/Users/Login");
 			}
+
+			this.SignIn(user.Id, user.Username, user.Email);
 
 			return this.Redirect("/");
 		}
@@ -63,24 +60,20 @@ namespace IRunes.App.Controllers
 				return Redirect("/Users/Register");
 			}
 
-			using (var context = new RunesDbContext())
+			if (userService.GetUserByUsernameOrEmail(username, email) != null)
 			{
-				if (context.Users.Any(u => u.Username == username || u.Email == email))
-				{
-					return Redirect("/Users/Register");
-				}
-
-				User user = new User
-				{
-					Username = username,
-					Email = email,
-					Password = passwordService.HashPassword(password)
-				};
-
-				context.Users.Add(user);
-				context.SaveChanges();
-				SignIn(user.Id, user.Username, user.Email);
+				return Redirect("/Users/Register");
 			}
+
+			User user = new User
+			{
+				Username = username,
+				Email = email,
+				Password = passwordService.HashPassword(password)
+			};
+
+			userService.CreateUser(user);
+			SignIn(user.Id, user.Username, user.Email);
 
 			return this.Redirect("/");
 		}
