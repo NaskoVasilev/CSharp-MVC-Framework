@@ -23,5 +23,7 @@
 		public const string StaticFolderName = "wwwroot";
 
 		public const string NotFoundDefaultMessage = "The resources was not found!";
+
+		public const string RedirectPath = "/Users/Login";
 	}
 }

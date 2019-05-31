@@ -3,20 +3,16 @@ using IRunes.Data;
 using IRunes.Models;
 using MvcFramework;
 using MvcFramework.Attributes.Http;
-using MvcFramework.HTTP.Requests.Contracts;
+using MvcFramework.Attributes.Security;
 using MvcFramework.Results;
 
 namespace IRunes.App.Controllers
 {
+	[Authorize]
 	public class TracksController : Controller
 	{
 		public IActionResult Create()
 		{
-			if (!this.IsLogedIn())
-			{
-				Redirect("/Users/Login");
-			}
-
 			ViewData["albumId"] = Request.QueryData["albumId"].ToString();
 			return View();
 		}
@@ -24,11 +20,6 @@ namespace IRunes.App.Controllers
 		[HttpPost(ActionName = nameof(Create))]
 		public IActionResult CreateConfirm()
 		{
-			if (!this.IsLogedIn())
-			{
-				Redirect("/Users/Login");
-			}
-
 			string albumId = Request.QueryData["albumId"].ToString();
 			string name = Request.FormData["name"].ToString();
 			string link = Request.FormData["link"].ToString();
@@ -53,11 +44,6 @@ namespace IRunes.App.Controllers
 
 		public IActionResult Details()
 		{
-			if (!this.IsLogedIn())
-			{
-				Redirect("/Users/Login");
-			}
-
 			string id = Request.QueryData["id"].ToString();
 
 			using (var context = new RunesDbContext())

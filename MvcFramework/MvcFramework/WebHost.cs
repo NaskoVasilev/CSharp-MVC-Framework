@@ -5,10 +5,12 @@ using System.Reflection;
 using MvcFramework.HTTP.Enums;
 using MvcFramework.Routing;
 using MvcFramework.Routing.Contracts;
-using MvcFramework.HTTP.Responses.Contracts;
 using MvcFramework.Attributes.Http;
 using MvcFramework.Attributes.Action;
 using MvcFramework.Results;
+using MvcFramework.Identity;
+using MvcFramework.Attributes.Security;
+using MvcFramework.HTTP.Common;
 
 namespace MvcFramework
 {
@@ -39,6 +41,8 @@ namespace MvcFramework
 
 				string controllerName = controller.Name.Replace("Controller", "");
 
+				AuthorizeAttribute controllerAuthorizeAttribute = controller.GetCustomAttribute<AuthorizeAttribute>() as AuthorizeAttribute;
+
 				foreach (var action in actions)
 				{
 					string path = $"/{controllerName}/{action.Name}";
@@ -67,12 +71,29 @@ namespace MvcFramework
 						typeof(Controller).GetProperty("Request", BindingFlags.Instance | BindingFlags.NonPublic)
 						.SetValue(controllerInstance, request);
 
+						Principal user = typeof(Controller).GetProperty("User", BindingFlags.Instance | BindingFlags.NonPublic)
+						.GetValue(controllerInstance) as Principal;
+
+						if (action.GetCustomAttribute<AllowAnonymousAttribute>() == null)
+						{
+							//Method authorize Attribute has more priority
+							if (action.GetCustomAttribute<AuthorizeAttribute>() is AuthorizeAttribute authorizeAttribute &&
+							!authorizeAttribute.IsAuthorized(user))
+							{
+								//TODO: the redirect path must be set from outside
+								return new RedirectResult(GlobalConstants.RedirectPath);
+							}
+							else if (controllerAuthorizeAttribute != null && !controllerAuthorizeAttribute.IsAuthorized(user))
+							{
+								return new RedirectResult(GlobalConstants.RedirectPath);
+							}
+						}
+
 						object response = action.Invoke(controllerInstance, new object[0]);
 						return response as IActionResult;
 					});
 				}
 			}
-
 		}
 	}
 }

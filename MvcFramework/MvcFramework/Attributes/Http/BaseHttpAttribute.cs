@@ -3,6 +3,7 @@ using System;
 
 namespace MvcFramework.Attributes.Http
 {
+	[AttributeUsage(AttributeTargets.Method)]
 	public abstract class BaseHttpAttribute : Attribute
 	{
 		public string ActionName { get; set; }

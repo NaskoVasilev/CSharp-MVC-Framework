@@ -31,7 +31,6 @@ namespace MvcFramework
 			}
 		}
 
-
 		protected IHttpRequest Request { get; private set; }
 
 		protected IActionResult View([CallerMemberName] string view = null)
