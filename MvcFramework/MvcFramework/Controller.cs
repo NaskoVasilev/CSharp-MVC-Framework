@@ -2,9 +2,8 @@
 using MvcFramework.HTTP.Common;
 using MvcFramework.HTTP.Enums;
 using MvcFramework.HTTP.Requests.Contracts;
-using MvcFramework.HTTP.Responses.Contracts;
+using MvcFramework.Identity;
 using MvcFramework.Results;
-using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
@@ -12,12 +11,28 @@ namespace MvcFramework
 {
 	public abstract class Controller
 	{
-		protected Dictionary<string, object> ViewData { get; set; }
-
 		public Controller()
 		{
 			ViewData = new Dictionary<string, object>();
 		}
+
+		protected Dictionary<string, object> ViewData { get; }
+
+		protected Principal User
+		{
+			get
+			{
+				if (this.Request.Session.ContainsParameter("principal"))
+				{
+					return (Principal)Request.Session.GetParameter("principal");
+				}
+
+				return null;
+			}
+		}
+
+
+		protected IHttpRequest Request { get; private set; }
 
 		protected IActionResult View([CallerMemberName] string view = null)
 		{
@@ -34,23 +49,20 @@ namespace MvcFramework
 			return new RedirectResult(url);
 		}
 
-		protected bool IsLogedIn(IHttpRequest request)
+		protected bool IsLogedIn()
 		{
-			if (request.Session.ContainsParameter("username"))
-			{
-				return true;
-			}
-			return false;
+			return this.User != null;
 		}
 
-		protected string GetUsername(IHttpRequest request)
+		protected void SignIn(string id, string username, string email)
 		{
-			if (IsLogedIn(request))
-			{
-				return request.Session.GetParameter("username").ToString();
-			}
+			Principal principal = new Principal(id, username, email);
+			Request.Session.AddParameter("principal", principal);
+		}
 
-			return null;
+		protected void SignOut()
+		{
+			Request.Session.ClearParameters();
 		}
 
 		protected IActionResult Xml(object obj)

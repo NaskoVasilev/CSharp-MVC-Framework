@@ -3,7 +3,6 @@ using IRunes.Data;
 using IRunes.Models;
 using MvcFramework;
 using MvcFramework.Attributes.Http;
-using MvcFramework.HTTP.Requests.Contracts;
 using MvcFramework.Results;
 using System.Linq;
 
@@ -12,24 +11,22 @@ namespace IRunes.App.Controllers
 	public class UsersController : Controller
 	{
 		private readonly IPasswordService passwordService;
-		private readonly UserManager userManager;
 
 		public UsersController()
 		{
 			this.passwordService = new PasswordService();
-			this.userManager = new UserManager();
 		}
 
-		public IActionResult Login(IHttpRequest request)
+		public IActionResult Login()
 		{
 			return View();
 		}
 
 		[HttpPost(ActionName = nameof(Login))]
-		public IActionResult LoginConfirm(IHttpRequest httpRequest)
+		public IActionResult LoginConfirm()
 		{
-			string username = httpRequest.FormData["username"].ToString();
-			string password = httpRequest.FormData["password"].ToString();
+			string username = Request.FormData["username"].ToString();
+			string password = Request.FormData["password"].ToString();
 			string hashedPassword = passwordService.HashPassword(password);
 
 			using (var context = new RunesDbContext())
@@ -42,24 +39,24 @@ namespace IRunes.App.Controllers
 					return Redirect("/Users/Login");
 				}
 
-				userManager.SignIn(httpRequest, user);
+				this.SignIn(user.Id, user.Username, user.Email);
 			}
 
 			return this.Redirect("/");
 		}
 
-		public IActionResult Register(IHttpRequest request)
+		public IActionResult Register()
 		{
 			return View();
 		}
 
 		[HttpPost(ActionName = nameof(Register))]
-		public IActionResult RegisterConfirm(IHttpRequest httpRequest)
+		public IActionResult RegisterConfirm()
 		{
-			string username = httpRequest.FormData["username"].ToString();
-			string email = httpRequest.FormData["email"].ToString();
-			string password = httpRequest.FormData["password"].ToString();
-			string confirmPassword = httpRequest.FormData["confirmPassword"].ToString();
+			string username = Request.FormData["username"].ToString();
+			string email = Request.FormData["email"].ToString();
+			string password = Request.FormData["password"].ToString();
+			string confirmPassword = Request.FormData["confirmPassword"].ToString();
 
 			if (password != confirmPassword)
 			{
@@ -82,15 +79,15 @@ namespace IRunes.App.Controllers
 
 				context.Users.Add(user);
 				context.SaveChanges();
-				userManager.SignIn(httpRequest, user);
+				SignIn(user.Id, user.Username, user.Email);
 			}
 
 			return this.Redirect("/");
 		}
 
-		public IActionResult Logout(IHttpRequest request)
+		public IActionResult Logout()
 		{
-			userManager.SignOut(request);
+			SignOut();
 			return Redirect("/");
 		}
 	}

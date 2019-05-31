@@ -1,19 +1,15 @@
-﻿using IRunes.Data;
-using MvcFramework;
-using MvcFramework.HTTP.Requests.Contracts;
+﻿using MvcFramework;
 using MvcFramework.Results;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace IRunes.App.Controllers
 {
 	public class HomeController : Controller
 	{
-		public IActionResult Index(IHttpRequest httpRequest)
+		public IActionResult Index()
 		{
-			if (this.IsLogedIn(httpRequest))
+			if (this.IsLogedIn())
 			{
-				ViewData["username"] = GetUsername(httpRequest);
+				ViewData["username"] = User.Username;
 				return View("Index-Logged");
 			}
 

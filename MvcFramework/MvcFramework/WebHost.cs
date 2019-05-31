@@ -8,6 +8,7 @@ using MvcFramework.Routing.Contracts;
 using MvcFramework.HTTP.Responses.Contracts;
 using MvcFramework.Attributes.Http;
 using MvcFramework.Attributes.Action;
+using MvcFramework.Results;
 
 namespace MvcFramework
 {
@@ -63,8 +64,11 @@ namespace MvcFramework
 					serverRoutingTable.Add(requestMethod, path, request =>
 					{
 						object controllerInstance = Activator.CreateInstance(controller);
-						object response = action.Invoke(controllerInstance, new[] { request });
-						return response as IHttpResponse;
+						typeof(Controller).GetProperty("Request", BindingFlags.Instance | BindingFlags.NonPublic)
+						.SetValue(controllerInstance, request);
+
+						object response = action.Invoke(controllerInstance, new object[0]);
+						return response as IActionResult;
 					});
 				}
 			}

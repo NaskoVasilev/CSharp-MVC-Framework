@@ -11,9 +11,9 @@ namespace IRunes.App.Controllers
 {
 	public class AlbumsController : Controller
 	{
-		public IActionResult All(IHttpRequest request)
+		public IActionResult All()
 		{
-			if (!this.IsLogedIn(request))
+			if (!this.IsLogedIn())
 			{
 				return Redirect("/Users/Login");
 			}
@@ -38,9 +38,9 @@ namespace IRunes.App.Controllers
 			return View();
 		}
 
-		public IActionResult Create(IHttpRequest request)
+		public IActionResult Create()
 		{
-			if (!this.IsLogedIn(request))
+			if (!this.IsLogedIn())
 			{
 				return Redirect("/Users/Login");
 			}
@@ -49,15 +49,15 @@ namespace IRunes.App.Controllers
 		}
 
 		[HttpPost(ActionName = nameof(Create))]
-		public IActionResult CreateConfirm(IHttpRequest request)
+		public IActionResult CreateConfirm()
 		{
-			if (!this.IsLogedIn(request))
+			if (!this.IsLogedIn())
 			{
 				return Redirect("/Users/Login");
 			}
 
-			string name = request.FormData["name"].ToString();
-			string cover = request.FormData["cover"].ToString();
+			string name = Request.FormData["name"].ToString();
+			string cover = Request.FormData["cover"].ToString();
 
 			using (var context = new RunesDbContext())
 			{
@@ -68,14 +68,14 @@ namespace IRunes.App.Controllers
 			return Redirect("/Albums/All");
 		}
 
-		public IActionResult Details(IHttpRequest request)
+		public IActionResult Details()
 		{
-			if (!this.IsLogedIn(request))
+			if (!this.IsLogedIn())
 			{
 				return Redirect("/Users/Login");
 			}
 
-			string id = request.QueryData["id"].ToString();
+			string id = Request.QueryData["id"].ToString();
 
 			using(var context = new RunesDbContext())
 			{
