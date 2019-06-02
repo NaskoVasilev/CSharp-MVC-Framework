@@ -1,67 +1,47 @@
-﻿<!DOCTYPE html>
-
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
-<head>
-	<meta charset="utf-8" />
-	<title>IRunes</title>
-	<link rel="icon" href="/favicon.ico">
-	<link href="/css/bootstrap.min.css" rel="stylesheet" />
-</head>
-<body>
-	<header>
-		<nav class="navbar navbar-expand-lg navbar-dark bg-success">
-			<a class="navbar-brand" href="#">IRunes</a>
-			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
-			<div class="collapse navbar-collapse" id="navbarNav">
-				<ul class="navbar-nav">
-					<li class="nav-item active">
-						<a class="nav-link" href="/">Home</a>
-					</li>
-					<li class="nav-item active">
-						<a class="nav-link" href="/Albums/All">Albums</a>
-					</li>
-					<li class="nav-item active">
-						<a class="nav-link" href="/Users/Logout">Logout</a>
-					</li>
-				</ul>
+﻿<header>
+	<nav class="navbar navbar-expand-lg navbar-dark bg-success">
+		<a class="navbar-brand" href="#">IRunes</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarNav">
+			<ul class="navbar-nav">
+				<li class="nav-item active">
+					<a class="nav-link" href="/">Home</a>
+				</li>
+				<li class="nav-item active">
+					<a class="nav-link" href="/Albums/All">Albums</a>
+				</li>
+				<li class="nav-item active">
+					<a class="nav-link" href="/Users/Logout">Logout</a>
+				</li>
+			</ul>
+		</div>
+	</nav>
+</header>
+<hr class="bg-success" style="height: 2px" />
+<main>
+	<h1 class="text-center text-success">Create Track</h1>
+	<hr class="bg-success w-50" style="height: 2px" />
+	<form class="w-50 mx-auto" method="POST">
+		<div class="form-group">
+			<label for="name">Name</label>
+			<input class="form-control" type="text" id="name" name="name" placeholder="Name..." />
+		</div>
+		<div class="row d-flex justify-content-between">
+			<div class="form-group col-md-5">
+				<label for="link">Link</label>
+				<input class="form-control" type="text" id="link" name="link" placeholder="Link..." />
 			</div>
-		</nav>
-	</header>
-	<hr class="bg-success" style="height: 2px" />
-	<main>
-		<h1 class="text-center text-success">Create Track</h1>
-		<hr class="bg-success w-50" style="height: 2px" />
-		<form class="w-50 mx-auto" method="POST">
-			<div class="form-group">
-				<label for="name">Name</label>
-				<input class="form-control" type="text" id="name" name="name" placeholder="Name..." />
+			<div class="form-group col-md-5">
+				<label for="price">Price</label>
+				<input class="form-control" type="text" id="price" name="price" placeholder="Price..." />
 			</div>
-			<div class="row d-flex justify-content-between">
-				<div class="form-group col-md-5">
-					<label for="link">Link</label>
-					<input class="form-control" type="text" id="link" name="link" placeholder="Link..." />
-				</div>
-				<div class="form-group col-md-5">
-					<label for="price">Price</label>
-					<input class="form-control" type="text" id="price" name="price" placeholder="Price..." />
-				</div>
-			</div>
-			<hr class="bg-success" style="height: 2px" />
-			<div class="d-flex justify-content-around">
-				<button class="btn btn-success" type="submit">Create</button>
-				<a class="btn btn-success" href="/Albums/Details?id=@albumId">Back To Album</a>
-			</div>
-		</form>
-	</main>
-	<hr class="bg-success" style="height: 2px" />
-	<footer class="font-weight-bold text-center">
-		<h5>CopyRight &copy; Sanity Design Studios. All rights reserved.</h5>
-	</footer>
-
-	<script src="/js/jquery-3.4.1.min.js"></script>
-	<script src="/js/popper.min.js"></script>
-	<script src="/js/bootstrap.min.js"></script>
-</body>
-</html>
+		</div>
+		<hr class="bg-success" style="height: 2px" />
+		<div class="d-flex justify-content-around">
+			<button class="btn btn-success" type="submit">Create</button>
+			<a class="btn btn-success" href="/Albums/Details?id=@albumId">Back To Album</a>
+		</div>
+	</form>
+</main>

@@ -33,14 +33,16 @@ namespace MvcFramework
 
 		protected IHttpRequest Request { get; private set; }
 
-		protected IActionResult View([CallerMemberName] string view = null)
+		protected IActionResult View([CallerMemberName] string viewName = null)
 		{
-			string controllerName = GetType().Name.Replace("Controller", "");
-			string path = $"Views/{controllerName}/{view}.html";
+			string controllerName = this.GetType().Name.Replace("Controller", "");
+			string path = $"Views/{controllerName}/{viewName}.html";
 			string viewContent = System.IO.File.ReadAllText(path);
-			viewContent = ParseTemplate(viewContent);
+			string layoutView = System.IO.File.ReadAllText($"Views/{GlobalConstants.LayoutName}");
+			string view = layoutView.Replace("@RenderBody()", viewContent);
+			view = ParseTemplate(view);
 
-			return new HtmlResult(viewContent, HttpResponseStatusCode.Ok);
+			return new HtmlResult(view, HttpResponseStatusCode.Ok);
 		}
 
 		protected IActionResult Redirect(string url)
