@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace MvcFramework.ViewEngine
 {
@@ -17,44 +18,44 @@ namespace MvcFramework.ViewEngine
 			string cSharpCode = GetCSharpCode(viewContent);
 
 			string code = $@"
-			using System;
-			using System.Linq;
-			using System.Collections.Generic;
-			using System.Text;
-			using MvcFramework.ViewEngine;
+using System;
+using System.Linq;
+using System.Collections.Generic;
+using System.Text;
+using MvcFramework.ViewEngine;
 
-			namespace AppViewCodeNamespace
-			{{
-				public class AppViewCode : IView
-				{{
-					public string GetHtml()
-					{{
-						var html = new StringBuilder();
+namespace AppViewCodeNamespace
+{{
+	public class AppViewCode : IView
+	{{
+		public string GetHtml(object model)
+		{{
+			var Model = model as {model.GetType().FullName};
 
-						html.AppendLine(""Hello from our view engine"");
-						List<int> numbers = Enumerable.Range(100, 5).ToList();
-						foreach (var numeber in numbers)
-						{{
-							html.AppendLine(numeber.ToString());
-						}}
+			var html = new StringBuilder();
+			{cSharpCode}
+			return html.ToString();
+		}}
+	}}
+}}";
 
-						return html.ToString();
-					}}
-				}}
-			}}";
-
-			IView view = CompileAndInstance(code);
-			var html = view.GetHtml();
+			IView view = CompileAndInstance(code, model?.GetType()?.Assembly);
+			var html = view.GetHtml(model).TrimEnd();
 
 			return html;
 		}
 
-		private IView CompileAndInstance(string code)
+		private IView CompileAndInstance(string code, Assembly modelAssembly)
 		{
 			CSharpCompilation compilation = CSharpCompilation.Create("AppViewModel")
 				.WithOptions(new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary))
 				.AddReferences(MetadataReference.CreateFromFile(typeof(object).Assembly.Location))
 				.AddReferences(MetadataReference.CreateFromFile(typeof(IView).Assembly.Location));
+
+			if(modelAssembly != null)
+			{
+				compilation = compilation.AddReferences(MetadataReference.CreateFromFile(modelAssembly.Location));
+			}
 
 			var netStandardAssemblies = Assembly.Load(new AssemblyName("netstandard")).GetReferencedAssemblies();
 
@@ -87,13 +88,13 @@ namespace MvcFramework.ViewEngine
 				Assembly assembly = Assembly.Load(assemblyBytes);
 
 				Type type = assembly.GetType("AppViewCodeNamespace.AppViewCode");
-				if(type == null)
+				if (type == null)
 				{
 					throw new NullReferenceException("AppViewCodeNamespace.AppViewCode class was not found!");
 				}
 
 				IView view = (IView)Activator.CreateInstance(type);
-				if(view == null)
+				if (view == null)
 				{
 					throw new NullReferenceException("AppViewCodeNamespace.AppViewCode class cannot be instanciated!");
 				}
@@ -104,7 +105,61 @@ namespace MvcFramework.ViewEngine
 
 		private string GetCSharpCode(string viewContent)
 		{
-			return string.Empty;
+			string[] lines = viewContent.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
+			StringBuilder cSharpCode = new StringBuilder();
+			string[] supportedOperators = new[] { "for", "if", "else" };
+			string cSharpCodePattern = @"@[^\s<\""\/]+";
+			Regex cSharpCodeRegex = new Regex(cSharpCodePattern);
+
+			foreach (var line in lines)
+			{
+				if (line.TrimStart().StartsWith("{") || line.TrimStart().StartsWith("}"))
+				{
+					cSharpCode.AppendLine(line);
+				}
+				else if (supportedOperators.Any(x => line.TrimStart().StartsWith("@" + x)))
+				{
+					int atSignIndex = line.IndexOf('@');
+					string cSharpLine = line.Remove(atSignIndex, 1);
+					cSharpCode.AppendLine(cSharpLine);
+				}
+				else
+				{
+					if (!line.Contains("@"))
+					{
+						string cSharpLine = $"html.AppendLine(@\"{line.Replace("\"", "\"\"")}\");";
+						cSharpCode.AppendLine(cSharpLine);
+					}
+					else
+					{
+						string cSharpLine = "html.AppendLine(@\"";
+						string restOfLine = line;
+
+						while (restOfLine.Contains("@"))
+						{
+							int atSsignLocation = restOfLine.IndexOf("@");
+							string plainText = restOfLine.Substring(0, atSsignLocation).Replace("\"", "\"\"");
+							string cSharpExpression = cSharpCodeRegex.Match(restOfLine)?.Value?.Substring(1);
+
+							cSharpLine += plainText + "\" + " + cSharpExpression + " + @\"";
+							int parsedLineLength = atSsignLocation + cSharpExpression.Length + 1;
+							if (restOfLine.Length <= parsedLineLength)
+							{
+								restOfLine = string.Empty;
+							}
+							else
+							{
+								restOfLine = restOfLine.Substring(parsedLineLength);
+							}
+						}
+
+						cSharpLine += restOfLine + "\");";
+						cSharpCode.AppendLine(cSharpLine);
+					}
+				}
+			}
+
+			return cSharpCode.ToString().TrimEnd();
 		}
 	}
 }

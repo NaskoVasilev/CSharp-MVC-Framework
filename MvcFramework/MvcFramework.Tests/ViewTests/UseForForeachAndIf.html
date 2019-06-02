@@ -3,7 +3,7 @@
 {
 	@foreach(var num in Enumerable.Range(101, 5))
 	{
-		if(num % 2 == 0)
+		@if(num % 2 == 0)
 		{
 			<div><span>@i</span> - <span>@num</span></div>
 		}

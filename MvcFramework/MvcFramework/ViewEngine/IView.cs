@@ -2,6 +2,6 @@
 {
 	public interface IView
 	{
-		string GetHtml();
+		string GetHtml(object model);
 	}
 }
