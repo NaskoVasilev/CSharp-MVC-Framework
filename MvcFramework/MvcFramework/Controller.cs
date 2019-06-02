@@ -4,6 +4,7 @@ using MvcFramework.HTTP.Enums;
 using MvcFramework.HTTP.Requests.Contracts;
 using MvcFramework.Identity;
 using MvcFramework.Results;
+using MvcFramework.ViewEngine;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
@@ -11,9 +12,12 @@ namespace MvcFramework
 {
 	public abstract class Controller
 	{
+		private IViewEngine viewEngine;
+
 		public Controller()
 		{
 			ViewData = new Dictionary<string, object>();
+			this.viewEngine = new SisViewEngine();
 		}
 
 		protected Dictionary<string, object> ViewData { get; }
@@ -35,12 +39,19 @@ namespace MvcFramework
 
 		protected IActionResult View([CallerMemberName] string viewName = null)
 		{
+			return this.View<object>(null, viewName);
+		}
+
+		protected IActionResult View<T>(T model = null, [CallerMemberName] string viewName = null) where T : class
+		{
 			string controllerName = this.GetType().Name.Replace("Controller", "");
 			string path = $"Views/{controllerName}/{viewName}.html";
 			string viewContent = System.IO.File.ReadAllText(path);
 			string layoutView = System.IO.File.ReadAllText($"Views/{GlobalConstants.LayoutName}");
 			string view = layoutView.Replace("@RenderBody()", viewContent);
-			view = ParseTemplate(view);
+
+			//TODO: use ParseTemplate method to replace ViewData keyValuePairs
+			view = viewEngine.GetHtml<T>(view, model);
 
 			return new HtmlResult(view, HttpResponseStatusCode.Ok);
 		}
@@ -98,7 +109,7 @@ namespace MvcFramework
 		{
 			foreach (var data in ViewData)
 			{
-				template = template.Replace($"@{data.Key}", data.Value.ToString());
+				template = template.Replace($"@ViewData[{data.Key}]", data.Value.ToString());
 			}
 
 			return template;
