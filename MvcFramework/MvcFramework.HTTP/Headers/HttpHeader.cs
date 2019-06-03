@@ -1,4 +1,4 @@
-﻿using MvcFramework.HTTP.Common;
+﻿using MvcFramework.Common;
 
 namespace MvcFramework.HTTP.Headers
 {

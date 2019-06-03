@@ -1,4 +1,4 @@
-﻿using MvcFramework.HTTP.Common;
+﻿using MvcFramework.Common;
 using MvcFramework.HTTP.Headers.Contracts;
 using System.Collections.Generic;
 

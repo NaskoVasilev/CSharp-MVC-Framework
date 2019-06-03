@@ -1,5 +1,4 @@
-﻿using MvcFramework.HTTP.Common;
-using MvcFramework.HTTP.Enums;
+﻿using MvcFramework.HTTP.Enums;
 using MvcFramework.HTTP.Headers;
 
 namespace MvcFramework.Results

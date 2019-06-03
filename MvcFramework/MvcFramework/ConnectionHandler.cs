@@ -1,4 +1,4 @@
-﻿using MvcFramework.HTTP.Common;
+﻿using MvcFramework.Common;
 using MvcFramework.HTTP.Cookies;
 using MvcFramework.HTTP.Enums;
 using MvcFramework.HTTP.Exceptions;
@@ -23,13 +23,17 @@ namespace MvcFramework
 
 		private readonly IServerRoutingTable serverRoutingTable;
 
-		public ConnectionHandler(Socket client, IServerRoutingTable serverRoutingTable)
+		private readonly IHttpSessionStorage httpSessionStorage;
+
+		public ConnectionHandler(Socket client, IServerRoutingTable serverRoutingTable, IHttpSessionStorage httpSessionStorage)
 		{
 			CoreValidator.ThrowIfNull(client, nameof(client));
 			CoreValidator.ThrowIfNull(serverRoutingTable, nameof(serverRoutingTable));
+			CoreValidator.ThrowIfNull(httpSessionStorage, nameof(httpSessionStorage));
 
 			this.client = client;
 			this.serverRoutingTable = serverRoutingTable;
+			this.httpSessionStorage = httpSessionStorage;
 		}
 
 		public async Task ProccessRequestAsync()
@@ -140,7 +144,7 @@ namespace MvcFramework
 				sessionId = Guid.NewGuid().ToString();
 			}
 
-			httpRequest.Session = HttpSessionStorage.GetSession(sessionId);
+			httpRequest.Session = this.httpSessionStorage.GetSession(sessionId);
 			return sessionId;
 		}
 

@@ -1,4 +1,6 @@
-﻿using MvcFramework.Routing.Contracts;
+﻿using MvcFramework.Common;
+using MvcFramework.Routing.Contracts;
+using MvcFramework.Sessions;
 using System;
 using System.Net;
 using System.Net.Sockets;
@@ -16,13 +18,19 @@ namespace MvcFramework
 
 		private readonly IServerRoutingTable serverRoutingTable;
 
+		private readonly IHttpSessionStorage httpSessionStorage;
+
 		private bool isRunning;
 
-		public Server(int port, IServerRoutingTable serverRoutingTable)
+		public Server(int port, IServerRoutingTable serverRoutingTable, IHttpSessionStorage httpSessionStorage)
 		{
+			CoreValidator.ThrowIfNull(serverRoutingTable, nameof(serverRoutingTable));
+			CoreValidator.ThrowIfNull(httpSessionStorage, nameof(httpSessionStorage));
+
 			this.port = port;
 			this.serverRoutingTable = serverRoutingTable;
 			listener = new TcpListener(IPAddress.Parse(LocalhostIpAdderss), port);
+			this.httpSessionStorage = httpSessionStorage;
 		}
 
 		public void Run()
@@ -40,7 +48,7 @@ namespace MvcFramework
 
 		private async Task Listen(Socket client)
 		{
-			ConnectionHandler connectionHandler = new ConnectionHandler(client, serverRoutingTable);
+			ConnectionHandler connectionHandler = new ConnectionHandler(client, serverRoutingTable, this.httpSessionStorage);
 			await connectionHandler.ProccessRequestAsync();
 		}
 	}

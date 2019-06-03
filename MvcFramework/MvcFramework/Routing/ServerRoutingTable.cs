@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using MvcFramework.HTTP.Common;
+using MvcFramework.Common;
 using MvcFramework.HTTP.Enums;
 using MvcFramework.HTTP.Requests.Contracts;
 using MvcFramework.HTTP.Responses.Contracts;

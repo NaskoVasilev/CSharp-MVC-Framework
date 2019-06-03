@@ -1,4 +1,4 @@
-﻿using MvcFramework.HTTP.Common;
+﻿using MvcFramework.Common;
 using MvcFramework.HTTP.Sessions.Contracts;
 using System;
 using System.Collections.Generic;

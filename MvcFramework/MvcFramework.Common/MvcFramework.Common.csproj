@@ -4,9 +4,4 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\MvcFramework.Common\MvcFramework.Common.csproj" />
-  </ItemGroup>
-
 </Project>
-

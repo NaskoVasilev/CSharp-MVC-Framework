@@ -10,7 +10,8 @@ using MvcFramework.Attributes.Action;
 using MvcFramework.Results;
 using MvcFramework.Identity;
 using MvcFramework.Attributes.Security;
-using MvcFramework.HTTP.Common;
+using MvcFramework.Sessions;
+using MvcFramework.Common;
 
 namespace MvcFramework
 {
@@ -19,11 +20,13 @@ namespace MvcFramework
 		public static void Start(IMvcApplication application)
 		{
 			IServerRoutingTable serverRoutingTable = new ServerRoutingTable();
+			IHttpSessionStorage httpSessionStorage = new HttpSessionStorage();
+
 			AutoRegisterRoutes(application, serverRoutingTable);
 
 			application.Configure(serverRoutingTable);
 
-			Server server = new Server(8000, serverRoutingTable);
+			Server server = new Server(8000, serverRoutingTable, httpSessionStorage);
 			server.Run();
 		}
 

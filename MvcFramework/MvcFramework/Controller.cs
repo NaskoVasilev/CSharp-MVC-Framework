@@ -1,5 +1,5 @@
-﻿using MvcFramework.Extensions;
-using MvcFramework.HTTP.Common;
+﻿using MvcFramework.Common;
+using MvcFramework.Extensions;
 using MvcFramework.HTTP.Enums;
 using MvcFramework.HTTP.Requests.Contracts;
 using MvcFramework.Identity;

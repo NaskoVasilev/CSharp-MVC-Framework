@@ -1,4 +1,4 @@
-﻿namespace MvcFramework.HTTP.Common
+﻿namespace MvcFramework.Common
 {
 	public static class GlobalConstants
 	{
