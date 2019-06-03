@@ -2,6 +2,7 @@
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Emit;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -30,7 +31,7 @@ namespace AppViewCodeNamespace
 	{{
 		public string GetHtml(object model)
 		{{
-			var Model = {(model == null ? "new {}" : "model as " + model.GetType().FullName)};
+			var Model = {(model == null ? "new {}" : GetModelType(model))};
 
 			var html = new StringBuilder();
 			{cSharpCode}
@@ -39,7 +40,7 @@ namespace AppViewCodeNamespace
 	}}
 }}";
 
-			IView view = CompileAndInstance(code, model?.GetType()?.Assembly);
+			IView view = CompileAndInstance(code, GetModelAssembly(model));
 			var html = view.GetHtml(model).TrimEnd();
 			return html;
 		}
@@ -160,6 +161,34 @@ namespace AppViewCodeNamespace
 			}
 
 			return cSharpCode.ToString().TrimEnd();
+		}
+
+		private string GetModelType<T>(T model)
+		{
+			if(model is IEnumerable)
+			{
+				string collectionType = model.GetType().Name;
+				collectionType = collectionType.Substring(0, collectionType.IndexOf("`"));
+				var genericArgument = model.GetType().GetGenericArguments()[0].FullName;
+				string modelType = $"{collectionType}<{genericArgument}>";
+				return "model as " + modelType;
+			}
+
+			return "model as " + model.GetType().FullName;
+		}
+
+		private Assembly GetModelAssembly<T>(T model)
+		{
+			if(model == null)
+			{
+				return null;
+			}
+
+			if(model is IEnumerable)
+			{
+				return model.GetType().GetGenericArguments()[0].Assembly;
+			}
+			return model.GetType().Assembly;
 		}
 	}
 }

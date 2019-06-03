@@ -25,7 +25,7 @@ namespace IRunes.App.Controllers
 				.Select(a => new AlbumInfoViewModel { Id= a.Id, Name = a.Name })
 				.ToList();
 
-			return View(new AlbumsAllViewModel { Albums = albums });
+			return View(albums);
 		}
 
 		public IActionResult Create()
