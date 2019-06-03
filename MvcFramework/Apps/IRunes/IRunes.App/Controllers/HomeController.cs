@@ -1,5 +1,5 @@
-﻿using MvcFramework;
-using MvcFramework.Attributes.Http;
+﻿using IRunes.App.ViewModels;
+using MvcFramework;
 using MvcFramework.Results;
 
 namespace IRunes.App.Controllers
@@ -10,8 +10,8 @@ namespace IRunes.App.Controllers
 		{
 			if (this.IsLogedIn())
 			{
-				ViewData["username"] = User.Username;
-				return View("Index-Logged");
+				UserHomeViewModel model = new UserHomeViewModel { Username = this.User.Username };
+				return View(model, "Index-Logged");
 			}
 
 			return View();

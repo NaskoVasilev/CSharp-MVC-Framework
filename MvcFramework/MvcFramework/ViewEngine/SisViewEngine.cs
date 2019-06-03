@@ -30,7 +30,7 @@ namespace AppViewCodeNamespace
 	{{
 		public string GetHtml(object model)
 		{{
-			var Model = model as {model.GetType().FullName};
+			var Model = {(model == null ? "new {}" : "model as " + model.GetType().FullName)};
 
 			var html = new StringBuilder();
 			{cSharpCode}
@@ -41,21 +41,18 @@ namespace AppViewCodeNamespace
 
 			IView view = CompileAndInstance(code, model?.GetType()?.Assembly);
 			var html = view.GetHtml(model).TrimEnd();
-
 			return html;
 		}
 
 		private IView CompileAndInstance(string code, Assembly modelAssembly)
 		{
+			modelAssembly = modelAssembly ?? Assembly.GetEntryAssembly();
+
 			CSharpCompilation compilation = CSharpCompilation.Create("AppViewModel")
 				.WithOptions(new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary))
 				.AddReferences(MetadataReference.CreateFromFile(typeof(object).Assembly.Location))
+				.AddReferences(MetadataReference.CreateFromFile(modelAssembly.Location))
 				.AddReferences(MetadataReference.CreateFromFile(typeof(IView).Assembly.Location));
-
-			if(modelAssembly != null)
-			{
-				compilation = compilation.AddReferences(MetadataReference.CreateFromFile(modelAssembly.Location));
-			}
 
 			var netStandardAssemblies = Assembly.Load(new AssemblyName("netstandard")).GetReferencedAssemblies();
 
@@ -77,6 +74,7 @@ namespace AppViewCodeNamespace
 					StringBuilder errors = new StringBuilder();
 					foreach (var error in emitResult.Diagnostics) //.Where(d => d.Severity == DiagnosticSeverity.Error))
 					{
+						Console.WriteLine(error.GetMessage());
 						errors.AppendLine(error.GetMessage());
 					}
 
@@ -90,12 +88,14 @@ namespace AppViewCodeNamespace
 				Type type = assembly.GetType("AppViewCodeNamespace.AppViewCode");
 				if (type == null)
 				{
+					Console.WriteLine("AppViewCodeNamespace.AppViewCode class was not found!");
 					throw new NullReferenceException("AppViewCodeNamespace.AppViewCode class was not found!");
 				}
 
 				IView view = (IView)Activator.CreateInstance(type);
 				if (view == null)
 				{
+					Console.WriteLine("AppViewCodeNamespace.AppViewCode class cannot be instanciated!");
 					throw new NullReferenceException("AppViewCodeNamespace.AppViewCode class cannot be instanciated!");
 				}
 
@@ -153,7 +153,7 @@ namespace AppViewCodeNamespace
 							}
 						}
 
-						cSharpLine += restOfLine + "\");";
+						cSharpLine += restOfLine.Replace("\"", "\"\"") + "\");";
 						cSharpCode.AppendLine(cSharpLine);
 					}
 				}

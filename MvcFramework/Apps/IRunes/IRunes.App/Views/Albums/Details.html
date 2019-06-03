@@ -23,17 +23,25 @@
 <main>
 	<div class="d-flex justify-content-between row">
 		<div class="col-md-5">
-			<img class="img-thumbnail" src="@cover" alt="Album Cover" />
-			@album
+			<img class="img-thumbnail" src="@Model.Cover" alt="Album Cover" />
+
+			<h5 class="text-center">Name: @Model.Name</h5>
+			<h5 class="text-center">Price: @Model.Price</h5>
+
 			<div class="d-flex justify-content-between">
-				<a class="btn btn-success" href="@createTrackHref">Create Track</a>
+				<a class="btn btn-success" href="/Tracks/Create?albumId=@Model.Id">Create Track</a>
 				<a class="btn btn-success" href="/Albums/All">Back To All</a>
 			</div>
 		</div>
 		<div class="col-md-6">
 			<h5>Tracks</h5>
 			<ol>
-				@tracks
+				@foreach(var track in Model.Tracks)
+				{
+					<li>
+						<a href="/Tracks/Details?id=@track.Id"><i>@track.Name</i></a>
+					</li>
+				}
 			</ol>
 		</div>
 	</div>

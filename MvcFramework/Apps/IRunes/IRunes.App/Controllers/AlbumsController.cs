@@ -1,4 +1,4 @@
-﻿using IRunes.App.Extensions;
+﻿using IRunes.App.ViewModels;
 using IRunes.Models;
 using IRunes.Services;
 using MvcFramework;
@@ -21,21 +21,11 @@ namespace IRunes.App.Controllers
 
 		public IActionResult All()
 		{
-
 			var albums = albumService.GetAllAlbums()
-				.Select(a => a.ToHtml())
+				.Select(a => new AlbumInfoViewModel { Id= a.Id, Name = a.Name })
 				.ToList();
 
-			if (albums.Count == 0)
-			{
-				ViewData["albums"] = "There are currently no albums.";
-			}
-			else
-			{
-				ViewData["albums"] = string.Join("", albums);
-			}
-
-			return View();
+			return View(new AlbumsAllViewModel { Albums = albums });
 		}
 
 		public IActionResult Create()
@@ -59,18 +49,19 @@ namespace IRunes.App.Controllers
 		{
 			string id = Request.QueryData["id"].ToString();
 
-
 			var album = albumService.GetAlbumById(id);
-			ViewData["album"] = album.AlbumDetailsToHtml();
-			ViewData["cover"] = album.Cover;
-			ViewData["createTrackHref"] = $"/Tracks/Create?albumId={album.Id}";
-
-			var tracks = album.Tracks
+			var model = new AlbumDetailsViewModel
+			{
+				Name = album.Name,
+				Price = album.Price,
+				Cover = album.Cover,
+				Id = album.Id,
+				Tracks = album.Tracks
+				.Select(t => new TrackAlbumDetailsViewModel { Id = t.Id, Name = t.Name })
 				.ToList()
-				.Select(t => t.TrackDetailsToHtml());
-			ViewData["tracks"] = string.Join("", tracks);
-
-			return View();
+			};
+		
+			return View(model);
 		}
 	}
 }

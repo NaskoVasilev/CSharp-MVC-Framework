@@ -1,4 +1,6 @@
-﻿namespace IRunes.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace IRunes.Models
 {
 	public class Track : BaseModel
 	{

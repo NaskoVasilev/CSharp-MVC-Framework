@@ -1,4 +1,4 @@
-﻿using IRunes.App.Extensions;
+﻿using IRunes.App.ViewModels;
 using IRunes.Models;
 using IRunes.Services;
 using MvcFramework;
@@ -22,8 +22,8 @@ namespace IRunes.App.Controllers
 
 		public IActionResult Create()
 		{
-			ViewData["albumId"] = Request.QueryData["albumId"].ToString();
-			return View();
+			string albumId = Request.QueryData["albumId"].ToString();
+			return View(new TrackCreateViewModel { AlbumId = albumId });
 		}
 
 		[HttpPost(ActionName = nameof(Create))]
@@ -51,13 +51,17 @@ namespace IRunes.App.Controllers
 		public IActionResult Details()
 		{
 			string id = Request.QueryData["id"].ToString();
-
 			Track track = trackService.GetById(id);
-			ViewData["track"] = track.ToTrackDetialsHtml();
-			ViewData["link"] = track.Link;
-			ViewData["albumId"] = track.AlbumId;
-
-			return View();
+			
+			TrackDetailsViewModel model = new TrackDetailsViewModel
+			{
+				Name = track.Name,
+				AlbumId = track.AlbumId,
+				Link = track.Link,
+				Id = track.Id,
+				Price = track.Price
+			};
+			return View(model);
 		}
 	}
 }

@@ -22,12 +22,15 @@
 <hr class="bg-success" style="height: 2px" />
 <main>
 	<div class="w-50 mx-auto">
-		@track
+
+		<h3 class="text-center">Name: @Model.Name</h3>
+		<h3 class="text-center">Price: @Model.Price</h3>
+
 		<hr class="bg-success" style="height: 2px" />
-		<iframe class="w-100" height="480" src="@link"></iframe>
+		<iframe class="w-100" height="480" src="@Model.Link"></iframe>
 		<hr class="bg-success" style="height: 2px" />
 		<div class="d-flex justify-content-center">
-			<a class="btn btn-success" href="/Albums/Details?id=@albumId">Back To Album</a>
+			<a class="btn btn-success" href="/Albums/Details?id=@Model.AlbumId">Back To Album</a>
 		</div>
 	</div>
 </main>
