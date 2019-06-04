@@ -4,6 +4,7 @@ using IRunes.Services;
 using MvcFramework;
 using MvcFramework.Attributes.Http;
 using MvcFramework.Attributes.Security;
+using MvcFramework.AutoMapper.Extensions;
 using MvcFramework.Results;
 
 namespace IRunes.App.Controllers
@@ -51,17 +52,9 @@ namespace IRunes.App.Controllers
 		public IActionResult Details()
 		{
 			string id = Request.QueryData["id"].ToString();
-			Track track = trackService.GetById(id);
+			TrackDetailsViewModel track = trackService.GetById(id).MapTo<TrackDetailsViewModel>();
 			
-			TrackDetailsViewModel model = new TrackDetailsViewModel
-			{
-				Name = track.Name,
-				AlbumId = track.AlbumId,
-				Link = track.Link,
-				Id = track.Id,
-				Price = track.Price
-			};
-			return View(model);
+			return View(track);
 		}
 	}
 }

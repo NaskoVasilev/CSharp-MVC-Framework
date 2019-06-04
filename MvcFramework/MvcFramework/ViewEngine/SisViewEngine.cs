@@ -169,6 +169,11 @@ namespace AppViewCodeNamespace
 			{
 				string collectionType = model.GetType().Name;
 				collectionType = collectionType.Substring(0, collectionType.IndexOf("`"));
+				if (collectionType.EndsWith("Iterator"))
+				{
+					collectionType = "IEnumerable";
+				}
+
 				var genericArgument = model.GetType().GetGenericArguments()[0].FullName;
 				string modelType = $"{collectionType}<{genericArgument}>";
 				return "model as " + modelType;

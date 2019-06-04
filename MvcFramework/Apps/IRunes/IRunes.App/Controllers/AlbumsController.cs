@@ -6,6 +6,7 @@ using MvcFramework.Attributes.Http;
 using MvcFramework.Attributes.Security;
 using MvcFramework.Results;
 using System.Linq;
+using MvcFramework.AutoMapper.Extensions;
 
 namespace IRunes.App.Controllers
 {
@@ -22,7 +23,7 @@ namespace IRunes.App.Controllers
 		public IActionResult All()
 		{
 			var albums = albumService.GetAllAlbums()
-				.Select(a => new AlbumInfoViewModel { Id= a.Id, Name = a.Name })
+				.MapTo<AlbumInfoViewModel>()
 				.ToList();
 
 			return View(albums);
@@ -48,20 +49,9 @@ namespace IRunes.App.Controllers
 		public IActionResult Details()
 		{
 			string id = Request.QueryData["id"].ToString();
-
-			var album = albumService.GetAlbumById(id);
-			var model = new AlbumDetailsViewModel
-			{
-				Name = album.Name,
-				Price = album.Price,
-				Cover = album.Cover,
-				Id = album.Id,
-				Tracks = album.Tracks
-				.Select(t => new TrackAlbumDetailsViewModel { Id = t.Id, Name = t.Name })
-				.ToList()
-			};
+			AlbumDetailsViewModel album = albumService.GetAlbumById(id).MapTo<AlbumDetailsViewModel>();
 		
-			return View(model);
+			return View(album);
 		}
 	}
 }
