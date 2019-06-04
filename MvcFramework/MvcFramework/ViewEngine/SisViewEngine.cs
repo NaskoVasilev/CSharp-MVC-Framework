@@ -109,8 +109,10 @@ namespace AppViewCodeNamespace
 			string[] lines = viewContent.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
 			StringBuilder cSharpCode = new StringBuilder();
 			string[] supportedOperators = new[] { "for", "if", "else" };
-			string cSharpCodePattern = @"@[^\s<\""\/]+";
+			string cSharpCodePattern = @"@[^\s<\""\/&]+";
+			string cSharpInlineCodePattern = @"@{[^}]+}";
 			Regex cSharpCodeRegex = new Regex(cSharpCodePattern);
+			Regex cSharpInlineCodeRegex = new Regex(cSharpInlineCodePattern);
 
 			foreach (var line in lines)
 			{
@@ -140,10 +142,22 @@ namespace AppViewCodeNamespace
 						{
 							int atSsignLocation = restOfLine.IndexOf("@");
 							string plainText = restOfLine.Substring(0, atSsignLocation).Replace("\"", "\"\"");
-							string cSharpExpression = cSharpCodeRegex.Match(restOfLine)?.Value?.Substring(1);
+
+							string cSharpExpression = cSharpInlineCodeRegex.Match(restOfLine)?.Value;
+							int cSharpExpresssionLength = 0;
+							if(!string.IsNullOrEmpty(cSharpExpression))
+							{
+								cSharpExpresssionLength = cSharpExpression.Length - 1;
+								cSharpExpression = cSharpExpression.Substring(2, cSharpExpression.Length - 3);
+							}
+							else
+							{
+								cSharpExpression = cSharpCodeRegex.Match(restOfLine)?.Value?.Substring(1);
+								cSharpExpresssionLength = cSharpExpression?.Length ?? 0;
+							}
 
 							cSharpLine += plainText + "\" + " + cSharpExpression + " + @\"";
-							int parsedLineLength = atSsignLocation + cSharpExpression.Length + 1;
+							int parsedLineLength = atSsignLocation + cSharpExpresssionLength + 1;
 							if (restOfLine.Length <= parsedLineLength)
 							{
 								restOfLine = string.Empty;

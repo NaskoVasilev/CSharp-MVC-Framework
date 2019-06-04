@@ -47,5 +47,28 @@ namespace MvcFramework.Tests
 			string actualViewContent = viewEngine.GetHtml<object>(viewContent, null);
 			Assert.Equal(expectedViewContent, actualViewContent);
 		}
+
+		[Theory]
+		[InlineData("InlineCSharpCode")]
+		public void TestGetHtmlWithAlbumViewModel(string testFileName)
+		{
+			IViewEngine viewEngine = new SisViewEngine();
+
+			string viewFileName = $"ViewTests/{testFileName}.html";
+			string expectedViewFileName = $"ViewTests/{testFileName}.Result.html";
+
+			string viewContent = File.ReadAllText(viewFileName);
+			string expectedViewContent = File.ReadAllText(expectedViewFileName);
+
+			AlbumTestViewModel model = new AlbumTestViewModel
+			{
+				Name = "Album Name",
+				Id = 1,
+				Price = 5
+			};
+
+			string actualViewContent = viewEngine.GetHtml(viewContent, model);
+			Assert.Equal(expectedViewContent, actualViewContent);
+		}
 	}
 }
