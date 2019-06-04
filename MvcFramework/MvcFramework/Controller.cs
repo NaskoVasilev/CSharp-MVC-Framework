@@ -51,7 +51,7 @@ namespace MvcFramework
 			string view = layoutView.Replace("@RenderBody()", viewContent);
 
 			//TODO: use ParseTemplate method to replace ViewData keyValuePairs
-			view = viewEngine.GetHtml<T>(view, model);
+			view = viewEngine.GetHtml<T>(view, model, this.User);
 
 			return new HtmlResult(view, HttpResponseStatusCode.Ok);
 		}

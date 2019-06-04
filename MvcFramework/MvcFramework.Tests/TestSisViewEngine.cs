@@ -50,6 +50,7 @@ namespace MvcFramework.Tests
 
 		[Theory]
 		[InlineData("InlineCSharpCode")]
+		[InlineData("MultilineCSharpCode")]
 		public void TestGetHtmlWithAlbumViewModel(string testFileName)
 		{
 			IViewEngine viewEngine = new SisViewEngine();

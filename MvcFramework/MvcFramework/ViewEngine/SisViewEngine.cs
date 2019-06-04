@@ -1,9 +1,9 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Emit;
+using MvcFramework.Identity;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -14,7 +14,7 @@ namespace MvcFramework.ViewEngine
 {
 	public class SisViewEngine : IViewEngine
 	{
-		public string GetHtml<T>(string viewContent, T model)
+		public string GetHtml<T>(string viewContent, T model, Principal user = null)
 		{
 			string cSharpCode = GetCSharpCode(viewContent);
 
@@ -24,14 +24,16 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Text;
 using MvcFramework.ViewEngine;
+using MvcFramework.Identity;
 
 namespace AppViewCodeNamespace
 {{
 	public class AppViewCode : IView
 	{{
-		public string GetHtml(object model)
+		public string GetHtml(object model, Principal user)
 		{{
 			var Model = {(model == null ? "new {}" : GetModelType(model))};
+			var User = user;
 
 			var html = new StringBuilder();
 			{cSharpCode}
@@ -41,7 +43,7 @@ namespace AppViewCodeNamespace
 }}";
 
 			IView view = CompileAndInstance(code, GetModelAssembly(model));
-			var html = view.GetHtml(model).TrimEnd();
+			var html = view.GetHtml(model, user).TrimEnd();
 			return html;
 		}
 
@@ -113,9 +115,27 @@ namespace AppViewCodeNamespace
 			string cSharpInlineCodePattern = @"@{[^}]+}";
 			Regex cSharpCodeRegex = new Regex(cSharpCodePattern);
 			Regex cSharpInlineCodeRegex = new Regex(cSharpInlineCodePattern);
+			bool isCSharpBlockCode = false;
 
 			foreach (var line in lines)
 			{
+				if(isCSharpBlockCode)
+				{
+					if(line == "@}")
+					{
+						isCSharpBlockCode = false;
+						continue;
+					}
+					cSharpCode.AppendLine(line);
+					continue;
+				}
+
+				if(line.TrimStart() == "@{")
+				{
+					isCSharpBlockCode = true;
+					continue;
+				}
+
 				if (line.TrimStart().StartsWith("{") || line.TrimStart().StartsWith("}"))
 				{
 					cSharpCode.AppendLine(line);
