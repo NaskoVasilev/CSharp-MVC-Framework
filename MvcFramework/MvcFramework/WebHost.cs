@@ -13,8 +13,8 @@ using MvcFramework.Sessions;
 using MvcFramework.Common;
 using MvcFramework.DependencyContainer;
 using MvcFramework.Logging;
-using MvcFramework.HTTP.Responses.Contracts;
 using MvcFramework.HTTP.Requests.Contracts;
+using MvcFramework.AutoMapper;
 
 namespace MvcFramework
 {
@@ -126,12 +126,36 @@ namespace MvcFramework
 
 				if(httpDataValue == null)
 				{
+					object defaultValue = null;
+					if (parameter.ParameterType.IsValueType)
+					{
+						defaultValue = System.Activator.CreateInstance(parameter.ParameterType);
+					}
+					actionParameters.Add(defaultValue);
 					continue;
 				}
 
-				string httpStringValue = httpDataValue.FirstOrDefault();
-				object parsedValue = System.Convert.ChangeType(httpStringValue, parameter.ParameterType);
-				actionParameters.Add(parsedValue);
+				object parameterValue = null;
+				if(ReflectionUtils.IsPrimitive(parameter.ParameterType))
+				{
+					string httpStringValue = httpDataValue.FirstOrDefault();
+					parameterValue = System.Convert.ChangeType(httpStringValue, parameter.ParameterType);
+				}
+				else if(ReflectionUtils.IsGenericCollection(parameter.ParameterType))
+				{
+					System.Type collecionElementsType = parameter.ParameterType.GetGenericArguments()[0];
+					parameterValue = httpDataValue.Select(t => System.Convert.ChangeType(t, collecionElementsType)).ToList();
+				}
+				else if(ReflectionUtils.IsNonGenericCollection(parameter.ParameterType))
+				{
+					//TODO: map arrays
+				}
+				else
+				{
+					//TODO: map classes
+				}
+
+				actionParameters.Add(parameterValue);
 			}
 				 
 			object response = action.Invoke(controllerInstance, actionParameters.ToArray());

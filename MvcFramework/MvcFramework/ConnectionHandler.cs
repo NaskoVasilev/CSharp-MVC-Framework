@@ -54,11 +54,11 @@ namespace MvcFramework
 			}
 			catch (BadRequestException e)
 			{
-				httpResponse = new TextResult(e.Message, HttpResponseStatusCode.BadRequest);
+				httpResponse = new TextResult(e.ToString(), HttpResponseStatusCode.BadRequest);
 			}
 			catch (Exception e)
 			{
-				httpResponse = new TextResult(e.Message, HttpResponseStatusCode.InernalServerError);
+				httpResponse = new TextResult(e.ToString(), HttpResponseStatusCode.InernalServerError);
 			}
 
 			await PrepareResponseAsync(httpResponse);
