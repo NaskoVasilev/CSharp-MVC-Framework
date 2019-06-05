@@ -15,9 +15,9 @@ namespace IRunes.App.Controllers
 	{
 		private readonly IAlbumService albumService;
 
-		public AlbumsController()
+		public AlbumsController(IAlbumService albumService)
 		{
-			albumService = new AlbumService();
+			this.albumService = albumService;
 		}
 
 		public IActionResult All()

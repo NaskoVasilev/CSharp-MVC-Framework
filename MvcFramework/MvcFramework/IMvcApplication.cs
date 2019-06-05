@@ -1,4 +1,5 @@
-﻿using MvcFramework.Routing.Contracts;
+﻿using MvcFramework.DependencyContainer;
+using MvcFramework.Routing.Contracts;
 
 namespace MvcFramework
 {
@@ -6,6 +7,6 @@ namespace MvcFramework
 	{
 		void Configure(IServerRoutingTable serverRoutingTable);
 
-		void ConfigureServices();
+		void ConfigureServices(IServiceProvider serviceProvider);
 	}
 }

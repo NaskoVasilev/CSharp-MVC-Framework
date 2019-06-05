@@ -7,9 +7,9 @@ namespace IRunes.Services
 	{
 		private readonly RunesDbContext context;
 
-		public TrackService()
+		public TrackService(RunesDbContext context)
 		{
-			this.context = new RunesDbContext();
+			this.context = context;
 		}
 
 		public Track CreateTrack(Track track)

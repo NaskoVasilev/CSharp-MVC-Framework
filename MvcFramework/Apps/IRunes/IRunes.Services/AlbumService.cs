@@ -10,11 +10,10 @@ namespace IRunes.Services
 	{
 		private readonly RunesDbContext context;
 
-		public AlbumService()
+		public AlbumService(RunesDbContext context)
 		{
-			this.context = new RunesDbContext();
+			this.context = context;
 		}
-
 
 		public Album CreateAlbum(Album album)
 		{

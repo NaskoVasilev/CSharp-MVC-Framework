@@ -1,10 +1,11 @@
-﻿using IRunes.App.Controllers;
+﻿using IRunes.App.Services;
 using IRunes.Data;
+using IRunes.Services;
 using MvcFramework;
+using MvcFramework.DependencyContainer;
 using MvcFramework.HTTP.Enums;
 using MvcFramework.Results;
 using MvcFramework.Routing.Contracts;
-using System;
 
 namespace IRunes.App
 {
@@ -20,9 +21,12 @@ namespace IRunes.App
 			serverRoutingTable.Add(HttpRequestMethod.Get, "/", request => new RedirectResult("/Home/Index"));
 		}
 
-		public void ConfigureServices()
+		public void ConfigureServices(IServiceProvider serviceProvider)
 		{
-			throw new NotImplementedException();
+			serviceProvider.Add<IUserService, UserService>();
+			serviceProvider.Add<IAlbumService, AlbumService>();
+			serviceProvider.Add<ITrackService, TrackService>();
+			serviceProvider.Add<IPasswordService, PasswordService>();
 		}
 	}
 }

@@ -12,10 +12,10 @@ namespace IRunes.App.Controllers
 		private readonly IPasswordService passwordService;
 		private readonly IUserService userService;
 
-		public UsersController()
+		public UsersController(IPasswordService passwordService, IUserService userService)
 		{
-			this.passwordService = new PasswordService();
-			this.userService = new UserService();
+			this.passwordService = passwordService;
+			this.userService = userService;
 		}
 
 		public IActionResult Login()

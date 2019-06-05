@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using MvcFramework.HTTP.Enums;
@@ -12,6 +11,8 @@ using MvcFramework.Identity;
 using MvcFramework.Attributes.Security;
 using MvcFramework.Sessions;
 using MvcFramework.Common;
+using MvcFramework.DependencyContainer;
+using MvcFramework.Logging;
 
 namespace MvcFramework
 {
@@ -21,30 +22,34 @@ namespace MvcFramework
 		{
 			IServerRoutingTable serverRoutingTable = new ServerRoutingTable();
 			IHttpSessionStorage httpSessionStorage = new HttpSessionStorage();
+			IServiceProvider serviceProvider = new ServiceProvider();
+			serviceProvider.Add<ILogger, ConsoleLogger>();
 
-			AutoRegisterRoutes(application, serverRoutingTable);
+			AutoRegisterRoutes(application, serverRoutingTable, serviceProvider);
 
+			application.ConfigureServices(serviceProvider);
 			application.Configure(serverRoutingTable);
-
 			Server server = new Server(8000, serverRoutingTable, httpSessionStorage);
 			server.Run();
 		}
 
-		private static void AutoRegisterRoutes(IMvcApplication application, IServerRoutingTable serverRoutingTable)
+		private static void AutoRegisterRoutes(IMvcApplication application, 
+			IServerRoutingTable serverRoutingTable, 
+			IServiceProvider serviceProvider)
 		{
-			IEnumerable<Type> controllers = application.GetType().Assembly
+			IEnumerable<System.Type> controllers = application.GetType().Assembly
 				.GetTypes()
 				.Where(type => type.IsClass && !type.IsAbstract && typeof(Controller).IsAssignableFrom(type));
 
-			foreach (var controller in controllers)
+			foreach (var controllerType in controllers)
 			{
-				IEnumerable<MethodInfo> actions = controller.GetMethods(BindingFlags.DeclaredOnly |
+				IEnumerable<MethodInfo> actions = controllerType.GetMethods(BindingFlags.DeclaredOnly |
 					BindingFlags.Instance | BindingFlags.Public)
 					.Where(m => !m.IsSpecialName && !m.IsVirtual && m.GetCustomAttribute<NonActionAttribute>() == null);
 
-				string controllerName = controller.Name.Replace("Controller", "");
+				string controllerName = controllerType.Name.Replace("Controller", "");
 
-				AuthorizeAttribute controllerAuthorizeAttribute = controller.GetCustomAttribute<AuthorizeAttribute>() as AuthorizeAttribute;
+				AuthorizeAttribute controllerAuthorizeAttribute = controllerType.GetCustomAttribute<AuthorizeAttribute>() as AuthorizeAttribute;
 
 				foreach (var action in actions)
 				{
@@ -70,7 +75,7 @@ namespace MvcFramework
 
 					serverRoutingTable.Add(requestMethod, path, request =>
 					{
-						object controllerInstance = Activator.CreateInstance(controller);
+						Controller controllerInstance = serviceProvider.CreateInstance(controllerType) as Controller;
 						typeof(Controller).GetProperty("Request", BindingFlags.Instance | BindingFlags.NonPublic)
 						.SetValue(controllerInstance, request);
 
