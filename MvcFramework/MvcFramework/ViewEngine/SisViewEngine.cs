@@ -108,7 +108,7 @@ namespace AppViewCodeNamespace
 
 		private string GetCSharpCode(string viewContent)
 		{
-			string[] lines = viewContent.Split(new char[]{ '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+			string[] lines = viewContent.Split(new char[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
 			StringBuilder cSharpCode = new StringBuilder();
 			string[] supportedOperators = new[] { "for", "if", "else" };
 			string cSharpCodePattern = @"@[^\s<\""\/&]+";
@@ -119,9 +119,9 @@ namespace AppViewCodeNamespace
 
 			foreach (var line in lines)
 			{
-				if(isCSharpBlockCode)
+				if (isCSharpBlockCode)
 				{
-					if(line == "@}")
+					if (line == "@}")
 					{
 						isCSharpBlockCode = false;
 						continue;
@@ -130,7 +130,7 @@ namespace AppViewCodeNamespace
 					continue;
 				}
 
-				if(line.TrimStart() == "@{")
+				if (line.TrimStart() == "@{")
 				{
 					isCSharpBlockCode = true;
 					continue;
@@ -148,49 +148,41 @@ namespace AppViewCodeNamespace
 				}
 				else
 				{
-					if (!line.Contains("@"))
-					{
-						string cSharpLine = $"html.AppendLine(@\"{line.Replace("\"", "\"\"")}\");";
-						cSharpCode.AppendLine(cSharpLine);
-					}
-					else
-					{
-						string cSharpLine = "html.AppendLine(@\"";
-						string restOfLine = line;
+					string cSharpLine = "html.AppendLine(@\"";
+					string restOfLine = line;
 
-						while (restOfLine.Contains("@"))
+					while (restOfLine.Contains("@"))
+					{
+						int atSsignLocation = restOfLine.IndexOf("@");
+						string plainText = restOfLine.Substring(0, atSsignLocation).Replace("\"", "\"\"");
+
+						string cSharpExpression = cSharpInlineCodeRegex.Match(restOfLine)?.Value;
+						int cSharpExpresssionLength = 0;
+						if (!string.IsNullOrEmpty(cSharpExpression))
 						{
-							int atSsignLocation = restOfLine.IndexOf("@");
-							string plainText = restOfLine.Substring(0, atSsignLocation).Replace("\"", "\"\"");
-
-							string cSharpExpression = cSharpInlineCodeRegex.Match(restOfLine)?.Value;
-							int cSharpExpresssionLength = 0;
-							if(!string.IsNullOrEmpty(cSharpExpression))
-							{
-								cSharpExpresssionLength = cSharpExpression.Length - 1;
-								cSharpExpression = cSharpExpression.Substring(2, cSharpExpression.Length - 3);
-							}
-							else
-							{
-								cSharpExpression = cSharpCodeRegex.Match(restOfLine)?.Value?.Substring(1);
-								cSharpExpresssionLength = cSharpExpression?.Length ?? 0;
-							}
-
-							cSharpLine += plainText + "\" + " + cSharpExpression + " + @\"";
-							int parsedLineLength = atSsignLocation + cSharpExpresssionLength + 1;
-							if (restOfLine.Length <= parsedLineLength)
-							{
-								restOfLine = string.Empty;
-							}
-							else
-							{
-								restOfLine = restOfLine.Substring(parsedLineLength);
-							}
+							cSharpExpresssionLength = cSharpExpression.Length - 1;
+							cSharpExpression = cSharpExpression.Substring(2, cSharpExpression.Length - 3);
+						}
+						else
+						{
+							cSharpExpression = cSharpCodeRegex.Match(restOfLine)?.Value?.Substring(1);
+							cSharpExpresssionLength = cSharpExpression?.Length ?? 0;
 						}
 
-						cSharpLine += restOfLine.Replace("\"", "\"\"") + "\");";
-						cSharpCode.AppendLine(cSharpLine);
+						cSharpLine += plainText + "\" + " + cSharpExpression + " + @\"";
+						int parsedLineLength = atSsignLocation + cSharpExpresssionLength + 1;
+						if (restOfLine.Length <= parsedLineLength)
+						{
+							restOfLine = string.Empty;
+						}
+						else
+						{
+							restOfLine = restOfLine.Substring(parsedLineLength);
+						}
 					}
+
+					cSharpLine += restOfLine.Replace("\"", "\"\"") + "\");";
+					cSharpCode.AppendLine(cSharpLine);
 				}
 			}
 
@@ -199,7 +191,7 @@ namespace AppViewCodeNamespace
 
 		private string GetModelType<T>(T model)
 		{
-			if(model is IEnumerable)
+			if (model is IEnumerable)
 			{
 				string collectionType = model.GetType().Name;
 				collectionType = collectionType.Substring(0, collectionType.IndexOf("`"));
@@ -218,12 +210,12 @@ namespace AppViewCodeNamespace
 
 		private Assembly GetModelAssembly<T>(T model)
 		{
-			if(model == null)
+			if (model == null)
 			{
 				return null;
 			}
 
-			if(model is IEnumerable)
+			if (model is IEnumerable)
 			{
 				return model.GetType().GetGenericArguments()[0].Assembly;
 			}
