@@ -25,10 +25,8 @@ namespace IRunes.App.Controllers
 		}
 
 		[HttpPost(ActionName = nameof(Login))]
-		public IActionResult LoginConfirm()
+		public IActionResult LoginConfirm(string username, string password)
 		{
-			string username = Request.FormData["username"].FirstOrDefault();
-			string password = Request.FormData["password"].FirstOrDefault();
 			string hashedPassword = passwordService.HashPassword(password);
 
 			User user = userService.GetUserByUsernameAndPassword(username, hashedPassword);
@@ -49,13 +47,8 @@ namespace IRunes.App.Controllers
 		}
 
 		[HttpPost(ActionName = nameof(Register))]
-		public IActionResult RegisterConfirm()
+		public IActionResult RegisterConfirm(string username, string email, string password, string confirmPassword)
 		{
-			string username = Request.FormData["username"].FirstOrDefault();
-			string email = Request.FormData["email"].FirstOrDefault();
-			string password = Request.FormData["password"].FirstOrDefault();
-			string confirmPassword = Request.FormData["confirmPassword"].FirstOrDefault();
-
 			if (password != confirmPassword)
 			{
 				return Redirect("/Users/Register");

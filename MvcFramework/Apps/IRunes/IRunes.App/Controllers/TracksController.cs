@@ -6,7 +6,6 @@ using MvcFramework.Attributes.Http;
 using MvcFramework.Attributes.Security;
 using MvcFramework.AutoMapper.Extensions;
 using MvcFramework.Results;
-using System.Linq;
 
 namespace IRunes.App.Controllers
 {
@@ -22,20 +21,14 @@ namespace IRunes.App.Controllers
 			this.albumService = albumService;
 		}
 
-		public IActionResult Create()
+		public IActionResult Create(string albumId)
 		{
-			string albumId = Request.QueryData["albumId"].FirstOrDefault();
 			return View(new TrackCreateViewModel { AlbumId = albumId });
 		}
 
 		[HttpPost(ActionName = nameof(Create))]
-		public IActionResult CreateConfirm()
+		public IActionResult CreateConfirm(string albumId, string name, string link, decimal price)
 		{
-			string albumId = Request.QueryData["albumId"].FirstOrDefault();
-			string name = Request.FormData["name"].FirstOrDefault();
-			string link = Request.FormData["link"].FirstOrDefault();
-			decimal price = decimal.Parse(Request.FormData["price"].FirstOrDefault());
-
 			Album album = albumService.GetById(albumId);
 			if (album == null)
 			{
@@ -50,9 +43,8 @@ namespace IRunes.App.Controllers
 			return Redirect("/Albums/Details?id=" + albumId);
 		}
 
-		public IActionResult Details()
-		{
-			string id = Request.QueryData["id"].FirstOrDefault();
+		public IActionResult Details(string id)
+		{ 
 			TrackDetailsViewModel track = trackService.GetById(id).MapTo<TrackDetailsViewModel>();
 			
 			return View(track);

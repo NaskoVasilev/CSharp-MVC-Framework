@@ -108,7 +108,33 @@ namespace MvcFramework
 				}
 			}
 
-			object response = action.Invoke(controllerInstance, new object[0]);
+			List<object> actionParameters = new List<object>();
+
+			foreach (var parameter in action.GetParameters())
+			{
+				ISet<string> httpDataValue = null;
+				string parameterName = parameter.Name.ToLower();
+
+				if(request.QueryData.ContainsKey(parameterName))
+				{
+					httpDataValue = request.QueryData[parameterName];
+				}
+				else if(request.FormData.ContainsKey(parameterName))
+				{
+					httpDataValue = request.FormData[parameterName];
+				}
+
+				if(httpDataValue == null)
+				{
+					continue;
+				}
+
+				string httpStringValue = httpDataValue.FirstOrDefault();
+				object parsedValue = System.Convert.ChangeType(httpStringValue, parameter.ParameterType);
+				actionParameters.Add(parsedValue);
+			}
+				 
+			object response = action.Invoke(controllerInstance, actionParameters.ToArray());
 			return response as IActionResult;
 		}
 	}
