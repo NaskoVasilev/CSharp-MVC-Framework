@@ -12,9 +12,9 @@ namespace MvcFramework.HTTP.Requests.Contracts
 
 		string Url { get; }
 
-		Dictionary<string, object> FormData { get; }
+		Dictionary<string, ISet<string>> FormData { get; }
 
-		Dictionary<string, object> QueryData { get; }
+		Dictionary<string, ISet<string>> QueryData { get; }
 
 		IHttpHeaderCollection Headers { get; }
 

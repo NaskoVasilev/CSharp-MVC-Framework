@@ -13,6 +13,8 @@ using MvcFramework.Sessions;
 using MvcFramework.Common;
 using MvcFramework.DependencyContainer;
 using MvcFramework.Logging;
+using MvcFramework.HTTP.Responses.Contracts;
+using MvcFramework.HTTP.Requests.Contracts;
 
 namespace MvcFramework
 {
@@ -75,33 +77,39 @@ namespace MvcFramework
 
 					serverRoutingTable.Add(requestMethod, path, request =>
 					{
-						Controller controllerInstance = serviceProvider.CreateInstance(controllerType) as Controller;
-						typeof(Controller).GetProperty("Request", BindingFlags.Instance | BindingFlags.NonPublic)
-						.SetValue(controllerInstance, request);
-
-						Principal user = typeof(Controller).GetProperty("User", BindingFlags.Instance | BindingFlags.NonPublic)
-						.GetValue(controllerInstance) as Principal;
-
-						if (action.GetCustomAttribute<AllowAnonymousAttribute>() == null)
-						{
-							//Method authorize Attribute has more priority
-							if (action.GetCustomAttribute<AuthorizeAttribute>() is AuthorizeAttribute authorizeAttribute &&
-							!authorizeAttribute.IsAuthorized(user))
-							{
-								//TODO: the redirect path must be set from outside
-								return new RedirectResult(GlobalConstants.RedirectPath);
-							}
-							else if (controllerAuthorizeAttribute != null && !controllerAuthorizeAttribute.IsAuthorized(user))
-							{
-								return new RedirectResult(GlobalConstants.RedirectPath);
-							}
-						}
-
-						object response = action.Invoke(controllerInstance, new object[0]);
-						return response as IActionResult;
+						return ProcessRequest(serviceProvider, request, controllerType, controllerAuthorizeAttribute, action);
 					});
 				}
 			}
+		}
+
+		private static IActionResult ProcessRequest(IServiceProvider serviceProvider,  IHttpRequest request, 
+			System.Type controllerType, AuthorizeAttribute controllerAuthorizeAttribute, MethodInfo action)
+		{
+			Controller controllerInstance = serviceProvider.CreateInstance(controllerType) as Controller;
+			typeof(Controller).GetProperty("Request", BindingFlags.Instance | BindingFlags.NonPublic)
+			.SetValue(controllerInstance, request);
+
+			Principal user = typeof(Controller).GetProperty("User", BindingFlags.Instance | BindingFlags.NonPublic)
+			.GetValue(controllerInstance) as Principal;
+
+			if (action.GetCustomAttribute<AllowAnonymousAttribute>() == null)
+			{
+				//Method authorize Attribute has more priority
+				if (action.GetCustomAttribute<AuthorizeAttribute>() is AuthorizeAttribute authorizeAttribute &&
+				!authorizeAttribute.IsAuthorized(user))
+				{
+					//TODO: the redirect path must be set from outside
+					return new RedirectResult(GlobalConstants.RedirectPath);
+				}
+				else if (controllerAuthorizeAttribute != null && !controllerAuthorizeAttribute.IsAuthorized(user))
+				{
+					return new RedirectResult(GlobalConstants.RedirectPath);
+				}
+			}
+
+			object response = action.Invoke(controllerInstance, new object[0]);
+			return response as IActionResult;
 		}
 	}
 }

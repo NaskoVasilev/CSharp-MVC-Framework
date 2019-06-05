@@ -4,6 +4,7 @@ using IRunes.Services;
 using MvcFramework;
 using MvcFramework.Attributes.Http;
 using MvcFramework.Results;
+using System.Linq;
 
 namespace IRunes.App.Controllers
 {
@@ -26,8 +27,8 @@ namespace IRunes.App.Controllers
 		[HttpPost(ActionName = nameof(Login))]
 		public IActionResult LoginConfirm()
 		{
-			string username = Request.FormData["username"].ToString();
-			string password = Request.FormData["password"].ToString();
+			string username = Request.FormData["username"].FirstOrDefault();
+			string password = Request.FormData["password"].FirstOrDefault();
 			string hashedPassword = passwordService.HashPassword(password);
 
 			User user = userService.GetUserByUsernameAndPassword(username, hashedPassword);
@@ -50,10 +51,10 @@ namespace IRunes.App.Controllers
 		[HttpPost(ActionName = nameof(Register))]
 		public IActionResult RegisterConfirm()
 		{
-			string username = Request.FormData["username"].ToString();
-			string email = Request.FormData["email"].ToString();
-			string password = Request.FormData["password"].ToString();
-			string confirmPassword = Request.FormData["confirmPassword"].ToString();
+			string username = Request.FormData["username"].FirstOrDefault();
+			string email = Request.FormData["email"].FirstOrDefault();
+			string password = Request.FormData["password"].FirstOrDefault();
+			string confirmPassword = Request.FormData["confirmPassword"].FirstOrDefault();
 
 			if (password != confirmPassword)
 			{

@@ -21,8 +21,8 @@ namespace MvcFramework.HTTP.Requests
 		{
 			CoreValidator.ThrowIfNullOrEmpty(requestString, nameof(requestString));
 
-			this.FormData = new Dictionary<string, object>();
-			this.QueryData = new Dictionary<string, object>();
+			this.FormData = new Dictionary<string, ISet<string>>();
+			this.QueryData = new Dictionary<string, ISet<string>>();
 			this.Headers = new HttpHeaderCollection();
 			this.Cookies = new HttpCookieCollection();
 
@@ -33,9 +33,9 @@ namespace MvcFramework.HTTP.Requests
 
 		public string Url { get; private set; }
 
-		public Dictionary<string, object> FormData { get; }
+		public Dictionary<string, ISet<string>> FormData { get; }
 
-		public Dictionary<string, object> QueryData { get; }
+		public Dictionary<string, ISet<string>> QueryData { get; }
 
 		public IHttpHeaderCollection Headers { get; }
 
@@ -136,8 +136,13 @@ namespace MvcFramework.HTTP.Requests
 			foreach (var parameter in parametersArray)
 			{
 				string[] keyValuePair = parameter.Split('=');
-				//TODO fix if have parameters with equal names
-				this.QueryData.Add(WebUtility.UrlDecode(keyValuePair[0]),WebUtility.UrlDecode(keyValuePair[1]));
+				string key = WebUtility.UrlDecode(keyValuePair[0]);
+				if (!this.QueryData.ContainsKey(key))
+				{
+					this.QueryData.Add(key, new HashSet<string>());
+				}
+
+				this.QueryData[key].Add(WebUtility.UrlDecode(keyValuePair[1]));
 			}
 		}
 		private void ParseFormDataParameters(string formData)
@@ -152,8 +157,14 @@ namespace MvcFramework.HTTP.Requests
 			foreach (var parameter in parametersArray)
 			{
 				string[] keyValuePair = parameter.Split('=');
-				//TODO fix if have parametesr with equal names
-				this.FormData.Add(WebUtility.UrlDecode(keyValuePair[0]), WebUtility.UrlDecode(keyValuePair[1]));
+				string key = WebUtility.UrlDecode(keyValuePair[0]);
+
+				if (!this.FormData.ContainsKey(key))
+				{
+					this.FormData.Add(key, new HashSet<string>());
+				}
+
+				this.FormData[key].Add(WebUtility.UrlDecode(keyValuePair[1]));
 			}
 		}
 		private void ParseRequestParameters(string formData)
