@@ -6,6 +6,7 @@ using System;
 using System.Collections;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -75,13 +76,17 @@ namespace AppViewCodeNamespace
 				if (!emitResult.Success)
 				{
 					StringBuilder errors = new StringBuilder();
-					foreach (var error in emitResult.Diagnostics) //.Where(d => d.Severity == DiagnosticSeverity.Error))
+					StringBuilder htmlErrorView = new StringBuilder();
+					htmlErrorView.AppendLine($"<h4>{emitResult.Diagnostics.Count()} errors:</h4>");
+
+					foreach (var error in emitResult.Diagnostics)
 					{
 						Console.WriteLine(error.GetMessage());
-						errors.AppendLine(error.GetMessage());
+						htmlErrorView.AppendLine($"<p>{error.GetMessage()}</p>");
 					}
 
-					throw new Exception("The input code cannot be compiled: \n" + errors.ToString());
+					htmlErrorView.AppendLine($"<pre>{WebUtility.HtmlEncode(code)}</pre>");
+					return new ErrorView(htmlErrorView.ToString());
 				}
 
 				memoryStream.Seek(0, SeekOrigin.Begin);
