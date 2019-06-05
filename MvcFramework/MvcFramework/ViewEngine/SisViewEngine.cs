@@ -108,7 +108,7 @@ namespace AppViewCodeNamespace
 
 		private string GetCSharpCode(string viewContent)
 		{
-			string[] lines = viewContent.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
+			string[] lines = viewContent.Split(new char[]{ '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
 			StringBuilder cSharpCode = new StringBuilder();
 			string[] supportedOperators = new[] { "for", "if", "else" };
 			string cSharpCodePattern = @"@[^\s<\""\/&]+";
