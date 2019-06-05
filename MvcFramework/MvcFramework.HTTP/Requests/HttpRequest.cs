@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
+using MvcFramework.HTTP.EqualityComaperers;
 
 namespace MvcFramework.HTTP.Requests
 {
@@ -21,8 +22,8 @@ namespace MvcFramework.HTTP.Requests
 		{
 			CoreValidator.ThrowIfNullOrEmpty(requestString, nameof(requestString));
 
-			this.FormData = new Dictionary<string, ISet<string>>();
-			this.QueryData = new Dictionary<string, ISet<string>>();
+			this.FormData = new Dictionary<string, ISet<string>>(new StringCaseInsensitiveEqualityComaparer());
+			this.QueryData = new Dictionary<string, ISet<string>>(new StringCaseInsensitiveEqualityComaparer());
 			this.Headers = new HttpHeaderCollection();
 			this.Cookies = new HttpCookieCollection();
 
@@ -136,7 +137,7 @@ namespace MvcFramework.HTTP.Requests
 			foreach (var parameter in parametersArray)
 			{
 				string[] keyValuePair = parameter.Split('=');
-				string key = WebUtility.UrlDecode(keyValuePair[0]);
+				string key = WebUtility.UrlDecode(keyValuePair[0]).ToLower();
 				if (!this.QueryData.ContainsKey(key))
 				{
 					this.QueryData.Add(key, new HashSet<string>());
@@ -157,7 +158,7 @@ namespace MvcFramework.HTTP.Requests
 			foreach (var parameter in parametersArray)
 			{
 				string[] keyValuePair = parameter.Split('=');
-				string key = WebUtility.UrlDecode(keyValuePair[0]);
+				string key = WebUtility.UrlDecode(keyValuePair[0]).ToLower();
 
 				if (!this.FormData.ContainsKey(key))
 				{
