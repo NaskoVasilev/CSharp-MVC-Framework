@@ -15,7 +15,7 @@ using MvcFramework.DependencyContainer;
 using MvcFramework.Logging;
 using MvcFramework.HTTP.Requests.Contracts;
 using MvcFramework.AutoMapper;
-using System.Collections;
+using MvcFramework.Utils;
 
 namespace MvcFramework
 {
@@ -137,13 +137,13 @@ namespace MvcFramework
 				{
 					System.Type collecionElementsType = parameterType.GetGenericArguments()[0];
 					var collection = httpDataValue.Select(t => System.Convert.ChangeType(t, collecionElementsType));
-					parameterValue = CastCollection(collection, collecionElementsType);
+					parameterValue = CastUtils.CastCollectionToList(collection, collecionElementsType);
 				}
 				else if (parameterType.IsArray)
 				{
-					//TODO: Support convert collection from collection of object to collection of another primitive type
 					System.Type arrayElementsType = parameterType.GetElementType();
-					parameterValue = httpDataValue.Select(t => System.Convert.ChangeType(t, arrayElementsType)).ToArray();
+					var array = httpDataValue.Select(t => System.Convert.ChangeType(t, arrayElementsType));
+					parameterValue = CastUtils.CastCollectionToArray(array, arrayElementsType);
 				}
 				else
 				{
@@ -174,36 +174,6 @@ namespace MvcFramework
 			}
 
 			return httpDataValue;
-		}
-
-		private static object CastCollection(IEnumerable<object> collection, System.Type elementType)
-		{
-			if (elementType == typeof(int))
-			{
-				return collection.Cast<int>().ToList();
-			}
-			else if(elementType == typeof(double))
-			{
-				return collection.Cast<double>().ToList();
-			}
-			else if (elementType == typeof(string))
-			{
-				return collection.Cast<string>().ToList();
-			}
-			else if (elementType == typeof(decimal))
-			{
-				return collection.Cast<decimal>().ToList();
-			}
-			else if (elementType == typeof(long))
-			{
-				return collection.Cast<long>().ToList();
-			}
-			else if (elementType == typeof(bool))
-			{
-				return collection.Cast<bool>().ToList();
-			}
-
-			return collection;
 		}
 	}
 }

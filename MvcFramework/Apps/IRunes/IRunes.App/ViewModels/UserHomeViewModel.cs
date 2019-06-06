@@ -3,7 +3,5 @@
 	public class UserHomeViewModel
 	{
 		public string Username { get; set; }
-
-		public object[] Data { get; set; }
 	}
 }
