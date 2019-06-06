@@ -1,8 +1,5 @@
-﻿using IRunes.App.ViewModels;
-using MvcFramework;
-using MvcFramework.Logging;
+﻿using MvcFramework;
 using MvcFramework.Results;
-using System.Collections.Generic;
 
 namespace IRunes.App.Controllers
 {
@@ -10,12 +7,6 @@ namespace IRunes.App.Controllers
 	{
 		public IActionResult Index()
 		{
-			if (this.IsLogedIn())
-			{
-				UserHomeViewModel model = new UserHomeViewModel { Username = this.User.Username };
-				return View(model, "Index-Logged");
-			}
-			
 			return View();
 		}
 	}

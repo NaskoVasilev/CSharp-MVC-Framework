@@ -126,6 +126,15 @@ namespace AppViewCodeNamespace
 
 			foreach (var line in lines)
 			{
+				//TODO: Write test for this
+				if (cSharpInlineCodeRegex.IsMatch(line.Trim()))
+				{
+					string cSharpLine = cSharpInlineCodeRegex.Match(line.Trim()).Value;
+					//@{ var name = "Atanas" }
+					cSharpCode.AppendLine(cSharpLine.Substring(2, cSharpLine.Length - 3));
+					continue;
+				}
+
 				if (isCSharpBlockCode)
 				{
 					if (line == "@}")
