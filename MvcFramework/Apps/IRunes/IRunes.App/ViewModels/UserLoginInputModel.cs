@@ -1,9 +1,9 @@
 ﻿namespace IRunes.App.ViewModels
 {
-	public class UserHomeViewModel
+	public class UserLoginInputModel
 	{
 		public string Username { get; set; }
 
-		public object[] Data { get; set; }
+		public string Password { get; set; }
 	}
 }

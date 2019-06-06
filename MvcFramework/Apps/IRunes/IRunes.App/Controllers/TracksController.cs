@@ -26,21 +26,21 @@ namespace IRunes.App.Controllers
 			return View(new TrackCreateViewModel { AlbumId = albumId });
 		}
 
-		[HttpPost(ActionName = nameof(Create))]
-		public IActionResult CreateConfirm(string albumId, string name, string link, decimal price)
+		[HttpPost]
+		public IActionResult Create(TrackCreateInputModel model)
 		{
-			Album album = albumService.GetById(albumId);
+			Album album = albumService.GetById(model.AlbumId);
 			if (album == null)
 			{
-				return Redirect("/Tracks/Create?albumId=" + albumId);
+				return Redirect("/Tracks/Create?albumId=" + model.AlbumId);
 			}
 
-			Track track = new Track { Name = name, Link = link, Price = price, AlbumId = album.Id };
-			album.Price += price * GlobalConstants.PriceDiscountConeficient;
+			Track track = model.MapTo<Track>();
+			album.Price += model.Price * GlobalConstants.PriceDiscountConeficient;
 			trackService.CreateTrack(track);
 			albumService.UpdateAlbum(album);
 
-			return Redirect("/Albums/Details?id=" + albumId);
+			return Redirect("/Albums/Details?id=" + model.AlbumId);
 		}
 
 		public IActionResult Details(string id)

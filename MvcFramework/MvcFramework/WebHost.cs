@@ -112,54 +112,67 @@ namespace MvcFramework
 
 			foreach (var parameter in action.GetParameters())
 			{
-				ISet<string> httpDataValue = null;
-				string parameterName = parameter.Name.ToLower();
+				object parameterValue = GetParamterValueFromHttpData(request, parameter.ParameterType, parameter.Name);
+				actionParameters.Add(parameterValue);
+			}
 
-				if(request.QueryData.ContainsKey(parameterName))
-				{
-					httpDataValue = request.QueryData[parameterName];
-				}
-				else if(request.FormData.ContainsKey(parameterName))
-				{
-					httpDataValue = request.FormData[parameterName];
-				}
+			object response = action.Invoke(controllerInstance, actionParameters.ToArray());
+			return response as IActionResult;
+		}
 
-				if(httpDataValue == null)
-				{
-					object defaultValue = null;
-					if (parameter.ParameterType.IsValueType)
-					{
-						defaultValue = System.Activator.CreateInstance(parameter.ParameterType);
-					}
-					actionParameters.Add(defaultValue);
-					continue;
-				}
+		private static object GetParamterValueFromHttpData(IHttpRequest request, System.Type parameterType, string parameterName)
+		{
+			ISet<string> httpDataValue = TryGetHttpParameter(request, parameterName);
 
-				object parameterValue = null;
-				if(ReflectionUtils.IsPrimitive(parameter.ParameterType))
+			object parameterValue = null;
+			try
+			{
+				string httpStringValue = httpDataValue.FirstOrDefault();
+				parameterValue = System.Convert.ChangeType(httpStringValue, parameterType);
+			}
+			catch (System.Exception)
+			{
+				if (ReflectionUtils.IsGenericCollection(parameterType))
 				{
-					string httpStringValue = httpDataValue.FirstOrDefault();
-					parameterValue = System.Convert.ChangeType(httpStringValue, parameter.ParameterType);
-				}
-				else if(ReflectionUtils.IsGenericCollection(parameter.ParameterType))
-				{
-					System.Type collecionElementsType = parameter.ParameterType.GetGenericArguments()[0];
+					//TODO: Suppurt convert collection from collection of object to collection of another primitive type
+					System.Type collecionElementsType = parameterType.GetGenericArguments()[0];
 					parameterValue = httpDataValue.Select(t => System.Convert.ChangeType(t, collecionElementsType)).ToList();
 				}
-				else if(ReflectionUtils.IsNonGenericCollection(parameter.ParameterType))
+				else if (parameterType.IsArray)
 				{
-					//TODO: map arrays
+					//TODO: Suppurt convert collection from collection of object to collection of another primitive type
+					System.Type arrayElementsType = parameterType.GetElementType();
+					parameterValue = httpDataValue.Select(t => System.Convert.ChangeType(t, arrayElementsType)).ToArray();
 				}
 				else
 				{
-					//TODO: map classes
+					parameterValue = System.Activator.CreateInstance(parameterType);
+					foreach (var property in parameterType.GetProperties())
+					{
+						object propertyValue = GetParamterValueFromHttpData(request, property.PropertyType, property.Name);
+						property.SetMethod.Invoke(parameterValue, new object[] { propertyValue });
+					}
 				}
-
-				actionParameters.Add(parameterValue);
 			}
-				 
-			object response = action.Invoke(controllerInstance, actionParameters.ToArray());
-			return response as IActionResult;
+
+			return parameterValue;
+		}
+
+		private static ISet<string> TryGetHttpParameter(IHttpRequest request, string parameterName)
+		{
+			ISet<string> httpDataValue = null;
+			parameterName = parameterName.ToLower();
+
+			if (request.QueryData.ContainsKey(parameterName))
+			{
+				httpDataValue = request.QueryData[parameterName];
+			}
+			else if (request.FormData.ContainsKey(parameterName))
+			{
+				httpDataValue = request.FormData[parameterName];
+			}
+
+			return httpDataValue;
 		}
 	}
 }

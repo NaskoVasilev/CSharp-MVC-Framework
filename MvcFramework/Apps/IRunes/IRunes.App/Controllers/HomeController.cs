@@ -8,13 +8,6 @@ namespace IRunes.App.Controllers
 {
 	public class HomeController : Controller
 	{
-		private readonly ILogger logger;
-
-		public HomeController(ILogger logger)
-		{
-			this.logger = logger;
-		}
-
 		public IActionResult Index()
 		{
 			if (this.IsLogedIn())

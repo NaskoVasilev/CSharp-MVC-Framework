@@ -34,10 +34,10 @@ namespace IRunes.App.Controllers
 			return View();
 		}
 
-		[HttpPost(ActionName = nameof(Create))]
-		public IActionResult CreateConfirm(string name, string cover)
+		[HttpPost]
+		public IActionResult Create(AlbumCreateInputModel model)
 		{
-			Album album = new Album { Name = name, Cover = cover };
+			Album album = model.MapTo<Album>();
 			albumService.CreateAlbum(album);
 
 			return Redirect("/Albums/All");
