@@ -1,6 +1,5 @@
 ﻿using IRunes.App.ViewModels;
 using MvcFramework;
-using MvcFramework.Logging;
 using MvcFramework.Results;
 using System.Collections.Generic;
 

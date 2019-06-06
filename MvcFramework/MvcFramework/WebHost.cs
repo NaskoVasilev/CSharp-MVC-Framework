@@ -15,6 +15,7 @@ using MvcFramework.DependencyContainer;
 using MvcFramework.Logging;
 using MvcFramework.HTTP.Requests.Contracts;
 using MvcFramework.AutoMapper;
+using System.Collections;
 
 namespace MvcFramework
 {
@@ -134,13 +135,13 @@ namespace MvcFramework
 			{
 				if (ReflectionUtils.IsGenericCollection(parameterType))
 				{
-					//TODO: Suppurt convert collection from collection of object to collection of another primitive type
 					System.Type collecionElementsType = parameterType.GetGenericArguments()[0];
-					parameterValue = httpDataValue.Select(t => System.Convert.ChangeType(t, collecionElementsType)).ToList();
+					var collection = httpDataValue.Select(t => System.Convert.ChangeType(t, collecionElementsType));
+					parameterValue = CastCollection(collection, collecionElementsType);
 				}
 				else if (parameterType.IsArray)
 				{
-					//TODO: Suppurt convert collection from collection of object to collection of another primitive type
+					//TODO: Support convert collection from collection of object to collection of another primitive type
 					System.Type arrayElementsType = parameterType.GetElementType();
 					parameterValue = httpDataValue.Select(t => System.Convert.ChangeType(t, arrayElementsType)).ToArray();
 				}
@@ -173,6 +174,36 @@ namespace MvcFramework
 			}
 
 			return httpDataValue;
+		}
+
+		private static object CastCollection(IEnumerable<object> collection, System.Type elementType)
+		{
+			if (elementType == typeof(int))
+			{
+				return collection.Cast<int>().ToList();
+			}
+			else if(elementType == typeof(double))
+			{
+				return collection.Cast<double>().ToList();
+			}
+			else if (elementType == typeof(string))
+			{
+				return collection.Cast<string>().ToList();
+			}
+			else if (elementType == typeof(decimal))
+			{
+				return collection.Cast<decimal>().ToList();
+			}
+			else if (elementType == typeof(long))
+			{
+				return collection.Cast<long>().ToList();
+			}
+			else if (elementType == typeof(bool))
+			{
+				return collection.Cast<bool>().ToList();
+			}
+
+			return collection;
 		}
 	}
 }
