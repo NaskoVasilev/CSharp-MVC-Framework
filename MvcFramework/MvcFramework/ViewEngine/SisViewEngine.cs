@@ -58,7 +58,9 @@ namespace AppViewCodeNamespace
 				.AddReferences(MetadataReference.CreateFromFile(modelAssembly.Location))
 				.AddReferences(MetadataReference.CreateFromFile(typeof(IView).Assembly.Location));
 
-			var netStandardAssemblies = Assembly.Load(new AssemblyName("netstandard")).GetReferencedAssemblies();
+			var netStandardAssembly = Assembly.Load(new AssemblyName("netstandard"));
+			compilation = compilation.AddReferences(MetadataReference.CreateFromFile(netStandardAssembly.Location));
+			var netStandardAssemblies = netStandardAssembly.GetReferencedAssemblies();
 
 			foreach (var assembly in netStandardAssemblies)
 			{
