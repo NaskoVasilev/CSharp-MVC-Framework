@@ -46,7 +46,19 @@ namespace MvcFramework.AutoMapper
 
 					if (ReflectionUtils.IsPrimitive(sourceValue.GetType()))
 					{
-						destProp.SetValue(dest, sourceValue);
+						if (destProp.PropertyType == typeof(string) && sourceProp.PropertyType != typeof(string))
+						{
+							destProp.SetValue(dest, sourceValue.ToString());
+						}
+						else if (destProp.PropertyType != sourceProp.PropertyType)
+						{
+							object parsedSourceValue = Convert.ChangeType(sourceValue, destProp.PropertyType);
+							destProp.SetValue(dest, parsedSourceValue);
+						}
+						else
+						{
+							destProp.SetValue(dest, sourceValue);
+						}
 						continue;
 					}
 
