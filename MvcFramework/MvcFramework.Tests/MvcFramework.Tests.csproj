@@ -17,6 +17,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="ViewTests\OneLineCSharpCode.Result.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ViewTests\OneLineCSharpCode.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="ViewTests\MultilineCSharpCode.Result.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

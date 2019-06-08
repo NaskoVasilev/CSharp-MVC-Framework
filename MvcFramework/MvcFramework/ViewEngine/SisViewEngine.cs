@@ -123,13 +123,14 @@ namespace AppViewCodeNamespace
 			Regex cSharpCodeRegex = new Regex(cSharpCodePattern);
 			Regex cSharpInlineCodeRegex = new Regex(cSharpInlineCodePattern);
 			bool isCSharpBlockCode = false;
+			int cSharpCodeDepth = 0;
 
 			foreach (var line in lines)
 			{
 				//TODO: Write test for this
-				if (cSharpInlineCodeRegex.IsMatch(line.Trim()))
+				if (line.Trim().StartsWith("@{") && line.Trim().EndsWith("}"))
 				{
-					string cSharpLine = cSharpInlineCodeRegex.Match(line.Trim()).Value;
+					string cSharpLine = line.Trim();
 					//@{ var name = "Atanas" }
 					cSharpCode.AppendLine(cSharpLine.Substring(2, cSharpLine.Length - 3));
 					continue;
@@ -137,11 +138,21 @@ namespace AppViewCodeNamespace
 
 				if (isCSharpBlockCode)
 				{
-					if (line == "@}")
+					if(line.Trim().StartsWith("{"))
 					{
-						isCSharpBlockCode = false;
-						continue;
+						cSharpCodeDepth++;
 					}
+					
+					if(line.TrimEnd().EndsWith("}"))
+					{
+						cSharpCodeDepth--;
+						if(cSharpCodeDepth <= 0)
+						{
+							isCSharpBlockCode = false;
+							continue;
+						}
+					}
+					
 					cSharpCode.AppendLine(line);
 					continue;
 				}
@@ -149,6 +160,7 @@ namespace AppViewCodeNamespace
 				if (line.TrimStart() == "@{")
 				{
 					isCSharpBlockCode = true;
+					cSharpCodeDepth++;
 					continue;
 				}
 

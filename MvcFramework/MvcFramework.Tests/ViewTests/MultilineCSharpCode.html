@@ -1,15 +1,18 @@
 ﻿@{
 	int sum = 0;
 
-	for(int i=0; i<=5; i++)
+	for(int i=0; i<=6; i++)
 	{
-		sum += i;
+		if(i % 2 == 0)
+		{
+			sum += i;
+		}
 	}
-@}
+}
 <h5>@sum</h5>
 @{
 	string name = "Atanas Vasilev";
 	string username = name.Substring(0, 6);
 	string family = name.Substring(7); 
-@}
+}
 <p>Full Name: @{username + " " + family}</p>

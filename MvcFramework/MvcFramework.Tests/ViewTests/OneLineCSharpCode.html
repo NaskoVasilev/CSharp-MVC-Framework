@@ -1,0 +1,8 @@
+﻿@{ string name = "Atanas"; }
+@{ int age = 17; }
+@{ double weight = 60.589; }
+
+<h3>Name: @name</h3>
+<h3>Age: @age</h3>
+<h3>Weight: @{Math.Round(weight, 2)}</h3>
+<p>I am @{ name + " - " + age} years old!</p>
