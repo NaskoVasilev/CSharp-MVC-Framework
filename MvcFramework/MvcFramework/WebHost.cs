@@ -16,6 +16,8 @@ using MvcFramework.Logging;
 using MvcFramework.HTTP.Requests.Contracts;
 using MvcFramework.AutoMapper;
 using MvcFramework.Utils;
+using MvcFramework.Validation;
+using MvcFramework.Attributes.Validation;
 
 namespace MvcFramework
 {
@@ -36,8 +38,8 @@ namespace MvcFramework
 			server.Run();
 		}
 
-		private static void AutoRegisterRoutes(IMvcApplication application, 
-			IServerRoutingTable serverRoutingTable, 
+		private static void AutoRegisterRoutes(IMvcApplication application,
+			IServerRoutingTable serverRoutingTable,
 			IServiceProvider serviceProvider)
 		{
 			IEnumerable<System.Type> controllers = application.GetType().Assembly
@@ -84,7 +86,7 @@ namespace MvcFramework
 			}
 		}
 
-		private static IActionResult ProcessRequest(IServiceProvider serviceProvider,  IHttpRequest request, 
+		private static IActionResult ProcessRequest(IServiceProvider serviceProvider, IHttpRequest request,
 			System.Type controllerType, AuthorizeAttribute controllerAuthorizeAttribute, MethodInfo action)
 		{
 			Controller controllerInstance = serviceProvider.CreateInstance(controllerType) as Controller;
@@ -114,11 +116,45 @@ namespace MvcFramework
 			foreach (var parameter in action.GetParameters())
 			{
 				object parameterValue = GetParamterValueFromHttpData(request, parameter.ParameterType, parameter.Name);
+
+
+				ModelStateDictionary modelState = ValidateObject(parameterValue);
+				typeof(Controller)
+					.GetProperty("ModelState", BindingFlags.Instance | BindingFlags.NonPublic)
+					.SetValue(controllerInstance, modelState);
+				
 				actionParameters.Add(parameterValue);
 			}
 
 			object response = action.Invoke(controllerInstance, actionParameters.ToArray());
 			return response as IActionResult;
+		}
+
+		private static ModelStateDictionary ValidateObject(object parameterValue)
+		{
+			ModelStateDictionary modelState = new ModelStateDictionary();
+			var objectProperties = parameterValue.GetType().GetProperties();
+
+			foreach (var objectProperty in objectProperties)
+			{
+				var validationAttributes = objectProperty
+					.GetCustomAttributes()
+					.Where(a => a is ValidationAttribute)
+					.Cast<ValidationAttribute>()
+					.ToList();
+
+				foreach (var validationAttribute in validationAttributes)
+				{
+					var propertyValue = objectProperty.GetValue(parameterValue);
+					bool isValid = validationAttribute.IsValid(propertyValue);
+					if (!isValid)
+					{
+						modelState.Add(objectProperty.Name, validationAttribute.ErrorMessage);
+					}
+				}
+			}
+
+			return modelState;
 		}
 
 		private static object GetParamterValueFromHttpData(IHttpRequest request, System.Type parameterType, string parameterName)

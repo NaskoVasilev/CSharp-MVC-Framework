@@ -4,6 +4,7 @@ using MvcFramework.HTTP.Enums;
 using MvcFramework.HTTP.Requests.Contracts;
 using MvcFramework.Identity;
 using MvcFramework.Results;
+using MvcFramework.Validation;
 using MvcFramework.ViewEngine;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -16,11 +17,9 @@ namespace MvcFramework
 
 		public Controller()
 		{
-			ViewData = new Dictionary<string, object>();
+			this.ModelState = new ModelStateDictionary();
 			this.viewEngine = new SisViewEngine();
 		}
-
-		protected Dictionary<string, object> ViewData { get; }
 
 		protected Principal User
 		{
@@ -34,6 +33,8 @@ namespace MvcFramework
 				return null;
 			}
 		}
+
+		protected ModelStateDictionary ModelState { get; private set; }
 
 		protected IHttpRequest Request { get; private set; }
 
@@ -103,16 +104,6 @@ namespace MvcFramework
 		protected IActionResult NotFound(string message = GlobalConstants.NotFoundDefaultMessage)
 		{
 			return new NotFoundResult(message);
-		}
-
-		private string ParseTemplate(string template)
-		{
-			foreach (var data in ViewData)
-			{
-				template = template.Replace($"@ViewData[{data.Key}]", data.Value.ToString());
-			}
-
-			return template;
 		}
 	}
 }

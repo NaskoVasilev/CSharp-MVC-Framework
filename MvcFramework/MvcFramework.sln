@@ -21,7 +21,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRunes.Services", "Apps\IRu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MvcFramework.Tests", "MvcFramework.Tests\MvcFramework.Tests.csproj", "{7F73692D-8912-4E16-92FA-EF05062D35E8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MvcFramework.Common", "MvcFramework.Common\MvcFramework.Common.csproj", "{DDEFB282-3935-4774-A667-561BD6B3361D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MvcFramework.Common", "MvcFramework.Common\MvcFramework.Common.csproj", "{DDEFB282-3935-4774-A667-561BD6B3361D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MvcFramework.SandBox", "Apps\MvcFramework.SandBox\MvcFramework.SandBox.csproj", "{54AE145E-DCE8-4A62-831F-0D705870CE59}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -61,6 +63,10 @@ Global
 		{DDEFB282-3935-4774-A667-561BD6B3361D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DDEFB282-3935-4774-A667-561BD6B3361D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DDEFB282-3935-4774-A667-561BD6B3361D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{54AE145E-DCE8-4A62-831F-0D705870CE59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{54AE145E-DCE8-4A62-831F-0D705870CE59}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{54AE145E-DCE8-4A62-831F-0D705870CE59}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{54AE145E-DCE8-4A62-831F-0D705870CE59}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -71,6 +77,7 @@ Global
 		{02B8626D-3A81-43E0-A72C-BD1184D83C99} = {4F8717BC-850D-4D60-8EE9-FECFCAF6B7CA}
 		{9B2023BC-9242-4B07-BB51-B5D963AE531A} = {4F8717BC-850D-4D60-8EE9-FECFCAF6B7CA}
 		{CE86BCCB-E2FB-43D9-A690-37310EB488AF} = {4F8717BC-850D-4D60-8EE9-FECFCAF6B7CA}
+		{54AE145E-DCE8-4A62-831F-0D705870CE59} = {777C9434-4EA1-4377-9514-0FB960FDDBD1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {093FC671-6D55-4CA5-AB0F-48AAEB54D746}

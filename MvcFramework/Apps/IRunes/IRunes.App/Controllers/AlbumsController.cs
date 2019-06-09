@@ -37,6 +37,11 @@ namespace IRunes.App.Controllers
 		[HttpPost]
 		public IActionResult Create(AlbumCreateInputModel model)
 		{
+			if(!ModelState.IsValid)
+			{
+				return Redirect("/");
+			}
+
 			Album album = model.MapTo<Album>();
 			albumService.CreateAlbum(album);
 
