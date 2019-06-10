@@ -28,19 +28,20 @@ namespace MvcFramework
 			IServerRoutingTable serverRoutingTable = new ServerRoutingTable();
 			IHttpSessionStorage httpSessionStorage = new HttpSessionStorage();
 			IServiceProvider serviceProvider = new ServiceProvider();
+			RouteSettings routeSettings = new RouteSettings { UnauthorizedRedirectRoute = GlobalConstants.RedirectPath };
 			serviceProvider.Add<ILogger, ConsoleLogger>();
 
-			AutoRegisterRoutes(application, serverRoutingTable, serviceProvider);
-
 			application.ConfigureServices(serviceProvider);
-			application.Configure(serverRoutingTable);
+			application.Configure(serverRoutingTable, routeSettings);
+			AutoRegisterRoutes(application, serverRoutingTable, serviceProvider, routeSettings);
 			Server server = new Server(8000, serverRoutingTable, httpSessionStorage);
 			server.Run();
 		}
 
 		private static void AutoRegisterRoutes(IMvcApplication application,
 			IServerRoutingTable serverRoutingTable,
-			IServiceProvider serviceProvider)
+			IServiceProvider serviceProvider,
+			RouteSettings routeSettings)
 		{
 			IEnumerable<System.Type> controllers = application.GetType().Assembly
 				.GetTypes()
@@ -80,14 +81,14 @@ namespace MvcFramework
 
 					serverRoutingTable.Add(requestMethod, path, request =>
 					{
-						return ProcessRequest(serviceProvider, request, controllerType, controllerAuthorizeAttribute, action);
+						return ProcessRequest(serviceProvider, request, controllerType, controllerAuthorizeAttribute, action, routeSettings);
 					});
 				}
 			}
 		}
 
 		private static IActionResult ProcessRequest(IServiceProvider serviceProvider, IHttpRequest request,
-			System.Type controllerType, AuthorizeAttribute controllerAuthorizeAttribute, MethodInfo action)
+			System.Type controllerType, AuthorizeAttribute controllerAuthorizeAttribute, MethodInfo action, RouteSettings routeSettings)
 		{
 			Controller controllerInstance = serviceProvider.CreateInstance(controllerType) as Controller;
 			typeof(Controller).GetProperty("Request", BindingFlags.Instance | BindingFlags.NonPublic)
@@ -102,12 +103,11 @@ namespace MvcFramework
 				if (action.GetCustomAttribute<AuthorizeAttribute>() is AuthorizeAttribute authorizeAttribute &&
 				!authorizeAttribute.IsAuthorized(user))
 				{
-					//TODO: the redirect path must be set from outside
-					return new RedirectResult(GlobalConstants.RedirectPath);
+					return new RedirectResult(routeSettings.UnauthorizedRedirectRoute);
 				}
 				else if (controllerAuthorizeAttribute != null && !controllerAuthorizeAttribute.IsAuthorized(user))
 				{
-					return new RedirectResult(GlobalConstants.RedirectPath);
+					return new RedirectResult(routeSettings.UnauthorizedRedirectRoute);
 				}
 			}
 
