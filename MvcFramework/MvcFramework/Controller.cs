@@ -51,8 +51,7 @@ namespace MvcFramework
 			string layoutView = System.IO.File.ReadAllText($"Views/{GlobalConstants.LayoutName}");
 			string view = layoutView.Replace("@RenderBody()", viewContent);
 
-			//TODO: use ParseTemplate method to replace ViewData keyValuePairs
-			view = viewEngine.GetHtml<T>(view, model, this.User);
+			view = viewEngine.GetHtml<T>(view, model, this.ModelState, this.User);
 
 			return new HtmlResult(view, HttpResponseStatusCode.Ok);
 		}

@@ -2,8 +2,12 @@
 {
 	public class RequiredAttribute : ValidationAttribute
 	{
-		public RequiredAttribute(string errorMessage) : base(errorMessage)
+		public RequiredAttribute(string propertyName = null, string errorMessage = DefaultErrorMessage) : base(errorMessage)
 		{
+			if(propertyName != null)
+			{
+				ErrorMessage = $"The {propertyName} is required";
+			}
 		}
 
 		public override bool IsValid(object value)

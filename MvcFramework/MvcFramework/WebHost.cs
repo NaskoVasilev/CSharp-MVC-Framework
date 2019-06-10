@@ -23,6 +23,8 @@ namespace MvcFramework
 {
 	public static class WebHost
 	{
+		private static readonly IControllerState controllerState = new ControllerState();
+
 		public static void Start(IMvcApplication application)
 		{
 			IServerRoutingTable serverRoutingTable = new ServerRoutingTable();
@@ -91,6 +93,8 @@ namespace MvcFramework
 			System.Type controllerType, AuthorizeAttribute controllerAuthorizeAttribute, MethodInfo action, RouteSettings routeSettings)
 		{
 			Controller controllerInstance = serviceProvider.CreateInstance(controllerType) as Controller;
+			controllerState.SetState(controllerInstance);
+
 			typeof(Controller).GetProperty("Request", BindingFlags.Instance | BindingFlags.NonPublic)
 			.SetValue(controllerInstance, request);
 
@@ -117,11 +121,15 @@ namespace MvcFramework
 			{
 				object parameterValue = GetParamterValueFromHttpData(request, parameter.ParameterType, parameter.Name);
 
-
-				ModelStateDictionary modelState = ValidateObject(parameterValue);
-				typeof(Controller)
+				if(request.RequestMethod == HttpRequestMethod.Post)
+				{
+					controllerState.Reset();
+					ModelStateDictionary modelState = ValidateObject(parameterValue);
+					typeof(Controller)
 					.GetProperty("ModelState", BindingFlags.Instance | BindingFlags.NonPublic)
 					.SetValue(controllerInstance, modelState);
+					controllerState.Initialize(controllerInstance);
+				}
 				
 				actionParameters.Add(parameterValue);
 			}

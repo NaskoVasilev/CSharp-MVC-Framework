@@ -7,9 +7,13 @@ namespace MvcFramework.Attributes.Validation
 	{
 		private readonly string pattern;
 
-		public RegexAttribute(string pattern, string errorMessage) : base(errorMessage)
+		public RegexAttribute(string pattern, string propertyName = null, string errorMessage = DefaultErrorMessage) : base(errorMessage)
 		{
 			this.pattern = pattern;
+			if(propertyName != null)
+			{
+				ErrorMessage = $"{propertyName} is invalid!";
+			}
 		}
 
 		public override bool IsValid(object value)

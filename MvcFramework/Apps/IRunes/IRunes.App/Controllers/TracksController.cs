@@ -29,6 +29,11 @@ namespace IRunes.App.Controllers
 		[HttpPost]
 		public IActionResult Create(TrackCreateInputModel model)
 		{
+			if(!ModelState.IsValid)
+			{
+				return Redirect("/Tracks/Create");
+			}
+
 			Album album = albumService.GetById(model.AlbumId);
 			if (album == null)
 			{

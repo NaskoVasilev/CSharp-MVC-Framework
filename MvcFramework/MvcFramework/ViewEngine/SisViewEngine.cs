@@ -2,6 +2,7 @@
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Emit;
 using MvcFramework.Identity;
+using MvcFramework.Validation;
 using System;
 using System.Collections;
 using System.IO;
@@ -15,7 +16,7 @@ namespace MvcFramework.ViewEngine
 {
 	public class SisViewEngine : IViewEngine
 	{
-		public string GetHtml<T>(string viewContent, T model, Principal user = null)
+		public string GetHtml<T>(string viewContent, T model, ModelStateDictionary modelState, Principal user = null)
 		{
 			string cSharpCode = GetCSharpCode(viewContent);
 
@@ -26,16 +27,18 @@ using System.Collections.Generic;
 using System.Text;
 using MvcFramework.ViewEngine;
 using MvcFramework.Identity;
+using MvcFramework.Validation;
 
 namespace AppViewCodeNamespace
 {{
 	public class AppViewCode : IView
 	{{
-		public string GetHtml(object model, Principal user)
+		public string GetHtml(object model, ModelStateDictionary modelState, Principal user)
 		{{
 			var Model = {(model == null ? "new {}" : GetModelType(model))};
 			var User = user;
-
+			var ModelState = modelState;
+			
 			var html = new StringBuilder();
 			{cSharpCode}
 			return html.ToString();
@@ -44,7 +47,7 @@ namespace AppViewCodeNamespace
 }}";
 
 			IView view = CompileAndInstance(code, GetModelAssembly(model));
-			var html = view.GetHtml(model, user).TrimEnd();
+			var html = view.GetHtml(model, modelState, user).TrimEnd();
 			return html;
 		}
 

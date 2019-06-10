@@ -5,7 +5,9 @@ namespace MvcFramework.Attributes.Validation
 {
 	public class EmailAttribute : ValidationAttribute
 	{
-		public EmailAttribute(string errorMessage) : base(errorMessage)
+		private const string DefailtEmailErrorMessage = "The email is not valid!";
+
+		public EmailAttribute(string errorMessage = DefailtEmailErrorMessage) : base(errorMessage)
 		{
 		}
 

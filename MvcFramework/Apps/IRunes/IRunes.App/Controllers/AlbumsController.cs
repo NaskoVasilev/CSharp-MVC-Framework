@@ -39,7 +39,7 @@ namespace IRunes.App.Controllers
 		{
 			if(!ModelState.IsValid)
 			{
-				return Redirect("/");
+				return Redirect("/Albums/Create");
 			}
 
 			Album album = model.MapTo<Album>();

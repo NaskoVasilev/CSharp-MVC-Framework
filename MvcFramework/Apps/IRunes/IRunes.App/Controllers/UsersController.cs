@@ -27,6 +27,11 @@ namespace IRunes.App.Controllers
 		[HttpPost]
 		public IActionResult Login(UserLoginInputModel model)
 		{
+			if(!ModelState.IsValid)
+			{
+				return Redirect("/Users/Login");
+			}
+
 			string hashedPassword = passwordService.HashPassword(model.Password);
 
 			User user = userService.GetUserByUsernameAndPassword(model.Username, hashedPassword);
@@ -49,8 +54,14 @@ namespace IRunes.App.Controllers
 		[HttpPost]
 		public IActionResult Register(UserRegisterInputModel model)
 		{
+			if (!ModelState.IsValid)
+			{
+				return Redirect("/Users/Register");
+			}
+
 			if (model.Password != model.ConfirmPassword)
 			{
+				ModelState.Add(string.Empty, "The passwords must match");
 				return Redirect("/Users/Register");
 			}
 

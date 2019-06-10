@@ -1,3 +1,4 @@
+using MvcFramework.Validation;
 using MvcFramework.ViewEngine;
 using System.Collections.Generic;
 using System.IO;
@@ -28,7 +29,8 @@ namespace MvcFramework.Tests
 				ListValues = new List<string>() { "123", string.Empty, "val1" }
 			};
 
-			string actualViewContent = viewEngine.GetHtml<TestViewModel>(viewContent, model);
+			ModelStateDictionary modelState = new ModelStateDictionary();
+			string actualViewContent = viewEngine.GetHtml<TestViewModel>(viewContent, model, modelState);
 			Assert.Equal(expectedViewContent, actualViewContent);
 		}
 
@@ -45,7 +47,7 @@ namespace MvcFramework.Tests
 			string viewContent = File.ReadAllText(viewFileName);
 			string expectedViewContent = File.ReadAllText(expectedViewFileName);
 
-			string actualViewContent = viewEngine.GetHtml<object>(viewContent, null);
+			string actualViewContent = viewEngine.GetHtml<object>(viewContent, null, new ModelStateDictionary());
 			Assert.Equal(expectedViewContent, actualViewContent);
 		}
 
@@ -69,7 +71,7 @@ namespace MvcFramework.Tests
 				Price = 5
 			};
 
-			string actualViewContent = viewEngine.GetHtml(viewContent, model);
+			string actualViewContent = viewEngine.GetHtml(viewContent, model, new ModelStateDictionary());
 			Assert.Equal(expectedViewContent, actualViewContent);
 		}
 	}
