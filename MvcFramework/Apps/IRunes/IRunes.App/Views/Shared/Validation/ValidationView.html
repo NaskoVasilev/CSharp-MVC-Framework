@@ -1,0 +1,9 @@
+﻿<div class="alert alert-danger" role="alert">
+	@if(!ModelState.IsValid)
+	{
+		@foreach(var error in ModelState.ErrorMessages.SelectMany(e => e.Value))
+		{
+			<p>@error</p>
+		}
+	}
+</div>

@@ -31,7 +31,7 @@ namespace IRunes.App.Controllers
 		{
 			if(!ModelState.IsValid)
 			{
-				return Redirect("/Tracks/Create");
+				return Redirect("/Tracks/Create?albumId=" + model.AlbumId);
 			}
 
 			Album album = albumService.GetById(model.AlbumId);
