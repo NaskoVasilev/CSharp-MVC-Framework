@@ -2,6 +2,7 @@
 	<h1 class="text-center text-success">Create Album</h1>
 	<hr class="bg-success w-50" style="height: 2px" />
 	<form class="w-50 mx-auto mb-4" action="/Albums/Create" method="POST">
+		@Widgets.ValidationWidget
 		<div class="form-group">
 			<label for="name">Name</label>
 			<input class="form-control" type="text" id="name" name="name" placeholder="Name..." />

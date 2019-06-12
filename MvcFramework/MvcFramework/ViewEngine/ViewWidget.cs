@@ -2,7 +2,7 @@
 
 namespace MvcFramework.ViewEngine
 {
-	public class ViewWidget : IViewWidget
+	public abstract class ViewWidget : IViewWidget
 	{
 		private const string WidgetFolderPath = "Views/Shared/Validation/";
 		private const string WidgetExtension = ".html";

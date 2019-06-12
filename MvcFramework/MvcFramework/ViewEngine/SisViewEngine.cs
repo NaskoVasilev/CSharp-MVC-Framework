@@ -5,6 +5,7 @@ using MvcFramework.Identity;
 using MvcFramework.Validation;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -18,7 +19,8 @@ namespace MvcFramework.ViewEngine
 	{
 		public string GetHtml<T>(string viewContent, T model, ModelStateDictionary modelState, Principal user = null)
 		{
-			string cSharpCode = GetCSharpCode(viewContent);
+			string cSharpCode = CheckForWidgets(viewContent);
+			cSharpCode = GetCSharpCode(cSharpCode);
 
 			string code = $@"
 using System;
@@ -49,6 +51,27 @@ namespace AppViewCodeNamespace
 			IView view = CompileAndInstance(code, GetModelAssembly(model));
 			var html = view.GetHtml(model, modelState, user).TrimEnd();
 			return html;
+		}
+
+		private string CheckForWidgets(string viewContent)
+		{
+			List<IViewWidget> widgets = Assembly.GetEntryAssembly()
+				.GetTypes()
+				.Where(type => typeof(IViewWidget).IsAssignableFrom(type))
+				.Select(type => (IViewWidget)Activator.CreateInstance(type))
+				.ToList();
+
+			if(widgets == null || widgets.Count == 0)
+			{
+				return viewContent;
+			}
+
+			foreach (var widget in widgets)
+			{
+				viewContent = viewContent.Replace($"@Widgets.{widget.GetType().Name}", widget.Render());
+			}
+
+			return viewContent;
 		}
 
 		private IView CompileAndInstance(string code, Assembly modelAssembly)

@@ -13,7 +13,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Views\Shared\Validation\ValidationView.html">
+    <Compile Update="Widgets\ValidationWidget.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Views\Shared\Validation\ValidationWidget.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Views\_Layout.html">

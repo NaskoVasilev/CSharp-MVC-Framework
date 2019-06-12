@@ -2,7 +2,7 @@
 
 namespace IRunes.App.Widgets
 {
-	public class ValidationView : ViewWidget
+	public class ValidationWidget : ViewWidget
 	{
 	}
 }
