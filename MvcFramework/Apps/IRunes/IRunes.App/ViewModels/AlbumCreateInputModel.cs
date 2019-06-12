@@ -4,7 +4,7 @@ namespace IRunes.App.ViewModels
 {
 	public class AlbumCreateInputModel
 	{
-		[StringLength(3, 30, nameof(Name))]
+		[StringLength(3, 30)]
 		public string Name { get; set; }
 
 		[Regex(@"^http(s)?://([\w-]+.)+[\w-]+(/[\w- ./?%&=])?$")]

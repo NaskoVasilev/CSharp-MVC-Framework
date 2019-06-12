@@ -4,10 +4,10 @@ namespace IRunes.App.ViewModels
 {
 	public class UserRegisterInputModel
 	{
-		[StringLength(3, 30, nameof(Username))]
+		[StringLength(3, 30)]
 		public string Username { get; set; }
 
-		[StringLength(3, 30, nameof(Password))]
+		[StringLength(3, 30)]
 		public string Password { get; set; }
 
 		public string ConfirmPassword { get; set; }

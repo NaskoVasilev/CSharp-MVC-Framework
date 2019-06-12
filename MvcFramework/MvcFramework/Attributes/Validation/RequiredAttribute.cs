@@ -2,17 +2,18 @@
 {
 	public class RequiredAttribute : ValidationAttribute
 	{
-		public RequiredAttribute(string propertyName = null, string errorMessage = DefaultErrorMessage) : base(errorMessage)
+		public RequiredAttribute(string errorMessage = DefaultErrorMessage) : base(errorMessage)
 		{
-			if(propertyName != null)
+		}
+
+		public override bool IsValid(object value, string propertyName)
+		{
+			if(ErrorMessage == DefaultErrorMessage)
 			{
 				ErrorMessage = $"The {propertyName} is required";
 			}
-		}
 
-		public override bool IsValid(object value)
-		{
-			return value != null;
+			return value != null && !string.IsNullOrEmpty((string)value);
 		}
 	}
 }

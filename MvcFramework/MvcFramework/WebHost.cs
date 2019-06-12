@@ -154,7 +154,7 @@ namespace MvcFramework
 				foreach (var validationAttribute in validationAttributes)
 				{
 					var propertyValue = objectProperty.GetValue(parameterValue);
-					bool isValid = validationAttribute.IsValid(propertyValue);
+					bool isValid = validationAttribute.IsValid(propertyValue, objectProperty.Name);
 					if (!isValid)
 					{
 						modelState.Add(objectProperty.Name, validationAttribute.ErrorMessage);

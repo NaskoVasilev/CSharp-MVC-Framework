@@ -4,11 +4,12 @@ namespace IRunes.App.ViewModels
 {
 	public class UserLoginInputModel
 	{
-		[Required]
-		[StringLength(3, 30, nameof(Username))]
-		public string Username { get; set; }
+		private const string ErrorMessage = "Invalid username or password!";
 
-		[StringLength(3, 30, nameof(Password))]
+		[Required(ErrorMessage)]
+		public string Username { get; set; }
+		
+		[Required(ErrorMessage)]
 		public string Password { get; set; }
 	}
 }

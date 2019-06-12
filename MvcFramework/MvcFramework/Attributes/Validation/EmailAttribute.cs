@@ -11,7 +11,7 @@ namespace MvcFramework.Attributes.Validation
 		{
 		}
 
-		public override bool IsValid(object value)
+		public override bool IsValid(object value, string propertyName)
 		{
 			string valueAsString = (string)Convert.ChangeType(value, typeof(string));
 			return Regex.IsMatch(valueAsString, @"\A(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z", RegexOptions.IgnoreCase);

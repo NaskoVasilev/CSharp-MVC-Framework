@@ -14,6 +14,6 @@ namespace MvcFramework.Attributes.Validation
 
 		public string ErrorMessage { get; protected set; }
 
-		public abstract bool IsValid(object value);
+		public abstract bool IsValid(object value, string propertyName);
 	}
 }

@@ -7,22 +7,22 @@ namespace MvcFramework.Attributes.Validation
 		private readonly int minLength;
 		private readonly int maxLength;
 
-		public StringLengthAttribute(int minLength, int maxLength, string propertyName = null, string errorMessage = DefaultErrorMessage) : base(errorMessage)
+		public StringLengthAttribute(int minLength, int maxLength, string errorMessage = DefaultErrorMessage) : base(errorMessage)
 		{
 			this.minLength = minLength;
 			this.maxLength = maxLength;
-
-			if(propertyName != null)
-			{
-				ErrorMessage = $"The {propertyName}'s length must be between {minLength} and {maxLength}!";
-			}
 		}
 
-		public override bool IsValid(object value)
+		public override bool IsValid(object value, string propertyName)
 		{
-			if(value == null)
+			if (value == null)
 			{
 				return false;
+			}
+
+			if (ErrorMessage == DefaultErrorMessage)
+			{
+				ErrorMessage = $"The {propertyName}'s length must be between {minLength} and {maxLength}!";
 			}
 
 			string valueAsString = (string)Convert.ChangeType(value, typeof(string));
