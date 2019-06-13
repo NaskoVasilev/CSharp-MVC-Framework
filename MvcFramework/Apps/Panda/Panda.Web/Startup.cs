@@ -3,6 +3,7 @@ using MvcFramework.DependencyContainer;
 using MvcFramework.Routing;
 using MvcFramework.Routing.Contracts;
 using Panda.Data;
+using Panda.Services;
 
 namespace Panda.Web
 {
@@ -18,7 +19,9 @@ namespace Panda.Web
 
 		public void ConfigureServices(IServiceProvider serviceProvider)
 		{
-
+			serviceProvider.Add<IUsersService, UsersService>();
+			serviceProvider.Add<IPackagesService, PackagesService>();
+			serviceProvider.Add<IReceiptsService, ReceiptsService>();
 		}
 	}
 }

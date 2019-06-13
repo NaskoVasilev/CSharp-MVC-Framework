@@ -12,13 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ViewModels\Packages\" />
-    <Folder Include="ViewModels\Receipts\" />
-    <Folder Include="ViewModels\Users\" />
-    <Folder Include="Views\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Update="Controllers\HomeController.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
@@ -38,6 +31,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Views\Receipts\Index.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Views\Shared\Validation\ValidationWidget.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Views\Users\Login.html">

@@ -5,6 +5,10 @@ namespace Panda.Data
 {
 	public class PandaDbContext : DbContext
 	{
+		public PandaDbContext()
+		{
+		}
+
 		public DbSet<User> Users { get; set; }
 
 		public DbSet<Package> Packages { get; set; }
