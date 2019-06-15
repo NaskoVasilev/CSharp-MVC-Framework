@@ -72,6 +72,13 @@ namespace MvcFramework
 			Request.Session.AddParameter("principal", principal);
 		}
 
+		protected void SignIn(string id, string username, string email, ICollection<string> roles)
+		{
+			Principal principal = new Principal(id, username, email);
+			principal.Roles = new HashSet<string>(roles);
+			Request.Session.AddParameter("principal", principal);
+		}
+
 		protected void SignOut()
 		{
 			Request.Session.ClearParameters();

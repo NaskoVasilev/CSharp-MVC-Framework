@@ -1,0 +1,24 @@
+﻿<main>
+	<h3 class="text-center text-torshia pt-4">Welcome, @User.Username</h3>
+	<h5 class="text-center text-torshia">Have a nice tasking exprerience</h5>
+	<hr class="bg-torshia hr-2" />
+
+	@for(int i = 0; i < Model.Count; i += 5)
+	{
+	<div class="row d-flex mb-3">
+		@for(int j = i; j < Math.Min(Model.Count, i + 5); j++)
+		{
+		<div class="px-4 text-center text-white bg-torshia pb-3 pt-4 rounded m-3 col-md-2">
+			<h5>@Model[j].Title</h5>
+			<hr class="my-3 hr-2 text-white bg-white" />
+			<h6>Level: @Model[j].Level</h6>
+			<hr class="my-3 hr-2 bg-white" />
+			<div class="d-flex justify-content-center">
+				<a class="a text-white mr-2 font-weight-bold" href="/Tasks/Report?id=@Model[j].Id">Report</a>
+				<a class="a text-white ml-2 font-weight-bold" href="/Tasks/Details?id=@Model[j].Id">Details</a>
+			</div>
+		</div>
+		}
+	</div>
+	}
+</main>

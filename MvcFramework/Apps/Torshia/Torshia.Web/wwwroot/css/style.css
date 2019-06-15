@@ -1,0 +1,39 @@
+.bg-torshia {
+    background-color: #FF8C00;
+}
+
+.w-19{
+    width: 19%;
+}
+
+.text-torshia {
+    color: #FF8C00;
+}
+
+.nav-link-white {
+    color: #FFFFFF;
+}
+
+.hr-2 {
+    height: 2px;
+}
+
+a {
+    text-underline: none;
+}
+
+a:hover {
+    outline: none;
+    text-decoration: none;
+}
+
+textarea {
+    resize: none;
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+    border: 0;
+    width: 98%;
+}
