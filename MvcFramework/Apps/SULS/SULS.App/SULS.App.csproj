@@ -5,4 +5,12 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SULS.Data\SULS.Data.csproj" />
+    <ProjectReference Include="..\SULS.InputModels\SULS.InputModels.csproj" />
+    <ProjectReference Include="..\SULS.Models\SULS.Models.csproj" />
+    <ProjectReference Include="..\SULS.Services\SULS.Services.csproj" />
+    <ProjectReference Include="..\SULS.ViewModels\SULS.ViewModels.csproj" />
+  </ItemGroup>
+
 </Project>
