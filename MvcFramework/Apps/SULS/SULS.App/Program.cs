@@ -1,12 +1,12 @@
-﻿using System;
+﻿using MvcFramework;
 
 namespace SULS.App
 {
-	class Program
-	{
-		static void Main(string[] args)
-		{
-			Console.WriteLine("Hello World!");
-		}
-	}
+	public class Program
+    {
+        public static void Main()
+        {
+            WebHost.Start(new StartUp());
+        }
+    }
 }
